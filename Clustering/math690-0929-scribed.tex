@@ -3,16 +3,33 @@
 \usepackage[a4paper,margin=2cm]{geometry}
 \usepackage{amsmath, amssymb, amsthm, amsfonts, tikz, algpseudocode}
 \usepackage[plain]{algorithm}
-\usepackage[framemethod=default]{mdframed}
+\usepackage[framemethod=TikZ]{mdframed}
+\definecolor{newblue}{rgb}{0.2,0.2,0.6}
+\usepackage[colorlinks,allcolors=newblue]{hyperref}
 
-\theoremstyle{plain}
-\newtheorem*{theorem}{Theorem}
-\newtheorem*{lemma}{Lemma}
-\newtheorem*{claim}{Claim}
-\newtheorem*{definition}{Definition}
-\newtheorem*{corollary}{Corollary}
 \DeclareMathOperator*{\argmin}{arg\,min}
 \DeclareMathOperator*{\eig}{eig}
+
+\newcommand{\handout}[5]{
+   \renewcommand{\thepage}{#1-\arabic{page}}
+   \noindent
+   \begin{center}
+   \framebox{
+      \vbox{
+    \hbox to 5.78in { {\bf MATH 690: Topics in Probablity Theory} \hfill #2 }
+       \vspace{4mm}
+       \hbox to 5.78in { {\Large \hfill #5  \hfill} }
+       \vspace{2mm}
+       \hbox to 5.78in { {\it #3 \hfill #4} }
+      }
+   }
+   \end{center}
+   \vspace*{4mm}
+}
+
+\renewcommand{\paragraph}[1]{\medskip \noindent {\bf #1.}}
+
+\newcommand{\lecture}[4]{\handout{#1}{#2}{Lecturer: #3}{Scribes: #4}{#1}}
 
 %%%% TITLE
 
@@ -22,51 +39,45 @@ Lecture notes for September 29, 2017}
 
 \author{Scribed by Dev Dabke and Andrew Cho}
 
+\input{math-boxes}
+
 \begin{document}
-\maketitle
+\lecture{Dimension Reduction}{September 29, 2017}{Xiuyuan Cheng}{Dev Dabke and Andrew Cho}
 
 \section{Introduction}
-The lecture covered the following:
+The lecture covered
 \begin{itemize}
-	\item wrap up of \textit{Topic 2: Dimension Reduction} by discussing convergence of eignemaps when p(x) is not uniform
-	\item start of \textit{Topic 3: Clustering}
+	\item A wrap up of \textit{Topic 2: Dimension Reduction} by discussing convergence of eignemaps when $ p(x) $ is not uniform
+	\item The start of \textit{Topic 3: Clustering}
 \end{itemize}
 
-\section{Wrap up Dimension Reduction}
+\section{Dimension Reduction}
 Recall the convergence of eigenmap
-% TODO: Fix this
-\[
-L_{n, \epsilon} \xrightarrow{n\to\infty} L_{\epsilon} \xrightarrow{\Sigma \to 0} L
-\]
-\[
-L_{\epsilon} f \xrightarrow{\epsilon \to 0} Lf ~\text{, for each}~ f. 
-\]
-This is a point-wise convergence operator and doesn't necessarily mean everything converges. Rather, what we need is a convergence of the spectrum $ \eig{L_{\Sigma}} \to \eig{L} $. In essence, we seek $\sup { \| L_{\Sigma} f - L f \| } \to 0$ where $ f \in C^2 (M) $, $ \| f \|_2^2 = 1 $, and $\int{f(x)^2dp(x)=1}$. Unfortunately, these last two conditions are not always true. 
-\\ \\
-$\textbf{Ref}$ (Belkin-Niyogi 2006)
+\begin{align*}
+	&L_{n, \epsilon} \xrightarrow{n\to\infty} L_{\epsilon} \xrightarrow{\Sigma \to 0} L & \\
+	&L_{\epsilon} f \xrightarrow{\epsilon \to 0} Lf &\text{for each } f
+\end{align*}
+This is a point-wise convergence operator and doesn't necessarily mean uniform convergence.
+Rather, what we need is a convergence of the spectrum $ \eig{L_{\Sigma}} \to \eig{L} $. In essence, we seek $\sup { \| L_{\Sigma} f - L f \| } \to 0$ where $ f \in C^2 (M) $, $ \| f \|_2^2 = 1 $, and $\int{f(x)^2dp(x)=1}$. Unfortunately, these last two conditions are not always true.~\cite{belkin-2003}
 
-
-$ t = \frac{1}{2} \epsilon $
-with
-\[
-L_t = \frac{I_{\alpha} - H_t}{t} + R_t
-\]
-\[
-H_t f(x) = u(x, t)
-\]
-defined as
-\[
-\begin{cases}
-    \partial_t u(x, t) &= -\Delta_M u(x, t) \\
-    u(x, 0) &= f(x)
-\end{cases}
-\]
+\begin{dfn}[Heat Kernel]{dfn:heat}
+Where $ t = \frac{1}{2} \epsilon $
+\begin{align*}
+	L_t &= \frac{I_{\alpha} - H_t}{t} + R_t \\
+	H_t f(x) &= u(x, t)
+\end{align*}
+where the function $ u $ has constraints
+\begin{align*}
+ u_{t} &= -\Delta_M u \\
+	u(x, 0) &= f(x)
+\end{align*}
+\end{dfn}
 As a result, we have that the residual $ \| R_t \| $ can be controlled properly
 which implies that $ \eig{L_t} = \eig{( \frac{I_d - H_t}{t} )} $
 and $ H_t f = e^{-t \Delta_M} f $
-\\ \\
-As an aside, note that for $ y'(t) = -at \implies y = e^{-at} y(0) $.
-\\ \\
+\begin{rmk}[Exponential ODE]{rmk:ode}
+$ y'(t) = -at \implies y = e^{-at} y(0) $.
+\end{rmk}
 Additionally
 \[
 \frac{1 - e^{-t\lambda_k}}{t} \xrightarrow{t \to 0} \lambda_k
@@ -77,33 +88,32 @@ H_t f = e^{-t \Delta_M} f
 \]
 such that $ \Delta_M : \{ \lambda_k, \psi_k \}_k $
 and that $ H_t : \{ e^{-t \lambda_k}, \psi_k \}_k $
-such that $ k = 1, \ldots, d $
+such that $ k = 1, \ldots, d $.
 \\ \\
-Remark that when $ p(x) $ is not uniform then
-\[
-L_{n, \epsilon} \to L_{FK}
-\]
-where $ L_{FK} f = \Delta_M f - \nabla u \dot \nabla f $
-and noting that $ p(x) = e^{-\frac{1}{2} u(x)} $
-(Fokker-Plank) that $ u(x) = -2 \log{p(x)} $
-\\ \\
-We have to perform a ``correction'' of density
-\[
-W_{ij} = k(x_i, x_j)
-\]
-and let
-\[
-d_i = \sum_{j} k(x_i, x_j)
-\]
-where we perform the correction by defining
-\[
-\widetilde{k} (x, y) = \frac{k(x, y)}{\sqrt{d(x)} \sqrt{d(y)}}
-\]
-and
-\[
-d(x) = \int_M k(x, y) p(y) dy
-\]
-is the degree function. However, we can never take a continuous integral in practice, so we instead compute
+\begin{rmk}[$ p(x) $ Uniformity]{rmk:p-uniform}
+	When $ p(x) $ is not uniform, then
+	\[
+	L_{n, \epsilon} \to L_{FK}
+	\]
+	where $ L_{FK} f = \Delta_M f - \nabla u \dot \nabla f $.
+	and that
+	\begin{align*}
+		p(x) &= e^{-\frac{1}{2} u(x)} \\
+		u(x) &= -2 \log{p(x)}
+	\end{align*}
+	by Fokker-Planck.
+\end{rmk}
+We have to perform a ``correction'' of density by defining a Weight Matrix $ W $ such that $ W_{ij} = k(x_i, x_j) $.
+\begin{dfn}[Affinity Matrix]{dfn:affinity}
+	Let
+	\begin{align*}
+		d_i &= \sum_{j} k(x_i, x_j) \\
+		\widetilde{k} (x, y) &= \frac{k(x, y)}{\sqrt{d(x)} \sqrt{d(y)}} \\
+		d(x) &= \int_M k(x, y) p(y) dy \\
+	\end{align*}
+	where $ d $ is the degree function.
+\end{dfn}
+In practice, we cannot take a continuous integral, so instead we compute
 \[
 d_R (x) = \frac{1}{n} \sum_{j = 1}^n k(x, x_j) \xrightarrow{n \to \infty} d(x)
 \]
@@ -111,29 +121,34 @@ and we let
 \[
 \widetilde{W_{ij}} = \frac{W_{ij}}{\sqrt{d(x)} \sqrt{d(y)}}
 \]
-and we should consider the eigenmap from $ \widetilde{W} $ instead of $ W $.
-\\ \\
-We consider the matrix $ \widetilde{L}_{rw} = I - \widetilde{D}^{-1} \widetilde{W} $ where
-\[
-\widetilde{D}_{ij} = \sum_j \widetilde{W}_{ij}
-\]
-and we have that
-\[
-\widetilde{L}_{n, \epsilon} \xrightarrow{n \to \infty \\ \epsilon \to \infty} \Delta_M
-\]
-The proof is omitted, but hint: as $ \epsilon \to 0, \, d_{\epsilon} (x) \approx p(x) \cdot \text{constant} $.
-Additionally, we can generalize this to a graph Laplacian with any $0 < \alpha < 1$. The corrected kernel $\widetilde{k}$ above uses $\alpha = \frac{1}{2}$.
-\[
-\widetilde{L}_{\alpha} = \frac{W_{ij}}{d_i^{\alpha} d_j^{\alpha}}
-\]
-\\ \\
-Recall that $k_{\epsilon} (x, y) = e^{= \frac{\| x - y \|^2}{2 \epsilon}}$ and $d_{\epsilon} (x) = \int_M k_{\epsilon} (x, y) p(y) dy \approx p(x)$
-\\ \\
-\section{Topic 3: Clustering}
-We start the discussion of our third topic on clustering by defining what the problem of clustering is. 
+and so consider the eigenmap from $ \widetilde{W} $ instead of $ W $.
+\begin{theo}[Convergence of $ L $]{theo:convergence}
+	Given the matrix $ \widetilde{L}_{rw} = I - \widetilde{D}^{-1} \widetilde{W} $ where
+	\[
+	\widetilde{D}_{ij} = \sum_j \widetilde{W}_{ij}
+	\]
+	then
+	\[
+	\widetilde{L}_{n, \epsilon} \xrightarrow{n \to \infty \\ \epsilon \to \infty} \Delta_M
+	\]
+\end{theo}
+\begin{prf}[Convergence of $ L $, Theorem~\ref{theo:convergence}]{prf:convergence}
+	The proof is omitted, but as hint, note that $ \epsilon \to 0, \, d_{\epsilon} (x) \approx p(x) \cdot \text{constant} $.
+	\\ \\
+	Additionally, we can generalize this to a graph Laplacian with any $ 0 < \alpha < 1 $.
+	The corrected kernel $\widetilde{k}$ above uses $\alpha = \frac{1}{2}$.
+	Therefore, we write
+	\[
+	\widetilde{L}_{\alpha} = \frac{W_{ij}}{d_i^{\alpha} d_j^{\alpha}}
+	\]
+	Recall that $k_{\epsilon} (x, y) = e^{= \frac{\| x - y \|^2}{2 \epsilon}}$ and $d_{\epsilon} (x) = \int_M k_{\epsilon} (x, y) p(y) dy \approx p(x)$.
+\end{prf}
 
-Problem: given $ \{ x_i \}_{i = 1}^n $ find clusters. These clusters may or may not have labels (supervised vs. unsupervised learning). 
+\section{Topic 3: Clustering}
+We start the discussion of our third topic on clustering by defining what the problem of clustering is.
 \\ \\
+Problem: given $ \{ x_i \}_{i = 1}^n $, find clusters.
+These clusters may or may not have labels (\textit{supervised} vs. \textit{unsupervised} learning).
 There are many possible definitions and models of clusters.
 For example, we will consider two possible cases:
 \begin{enumerate}
@@ -144,42 +159,46 @@ For example, we will consider two possible cases:
 \subsection{Case 1: With Data Points}
 We will consider a better and precise formulation of ``clusters'' using a scheme of ``hard membership.''
 \\ \\
-Given $ \{ x_i \}_{i = 1}^n $, find a partition of the vertices $ \mathcal{V} = \{ 1, \ldots, n \} $
-into disjoint subsets
-\[
-\mathcal{C} = \{ C_1, \ldots, C_k \}
-\]
-i.e.\ $ C_{l} \cap C_{l'} = \{ \emptyset \} \iff l \neq l' $
-such that
-\[
-\mathcal{V} = \bigcup_{C \in \mathcal{C}} C
-\]
-and we say that each $ C_{i} $ gives the $ i^{th} $ cluster.
-\\ \\
-$\textbf{Remark:}$ we can also consider some idea of ``soft membership.''
-In this case, we have some probability profile over each node such that
-$\mathbb{P} (\text{node}~ i \in C_l) = p_{i,l}$ with the constraint that $ \forall i,~ \sum_{l = 1}^k p_{il} = 1$
-\\ \\
-At any rate, we could start with $ k $-means.
-The process is as follows (Llyod's Algorithm 1957)
-\begin{enumerate}
-    \item Randomly generate ``centroids'' $ \{ \mu_1, \ldots, \mu_k \} = \mu $
-    \item (assignment) $ \forall i $ assign $ x_i $ to the closest centroid in $ \mu $ and this gives a partition $ \mathcal{C} $
-    \item (update of $ \mu $) for $ l = 1, \ldots, k $ we compute an updated $ \mu_l' $ where we let
-    \[
-    \mu_l' = \frac{1}{| C_{l} |} \sum_{i \in C_l} x_i
-    \]
-    and $ | C_{l} | $ is ``the cardinal number of the set $ C_l $.''
-\end{enumerate}
-After step $ 3 $, we repeat step $ 2-3 $ until we reach the stopping condition: $\| \mu_{\textsc{new}} - \mu_{\textsc{old}} \| < \delta$ for some tolerance level $ \delta $.
-
-This process gives us the objective function we are ultimately solving for.
-$$\underset{\mu, C}{\operatorname{argmin}}  \sum_{l = 1}^k \sum_{i \in C_l} \| x_i - \mu_l \|^2$$
-
-$\textbf{Remark}$.
+\begin{dfn}[Cluster]{dfn:cluster}
+	Given $ \{ x_i \}_{i = 1}^n $, find a partition of the vertices $ \mathcal{V} = \{ 1, \ldots, n \} $
+	into disjoint subsets $ \mathcal{C} = \{ C_1, \ldots, C_k \} $
+	such that
+	\[
+	\mathcal{V} = \bigcup_{C \in \mathcal{C}} C
+	\]
+	where ``disjoint'' means $ C_{l} \cap C_{l'} = \{ \emptyset \} \iff l \neq l' $.
+	\\ \\
+	We say that each $ C_{i} $ is the $ i^{th} $ cluster.
+\end{dfn}
+\begin{rmk}[Soft Membership]{rmk:soft}
+	We can also consider some idea of ``soft membership.''
+	In this case, we have some probability profile over each node such that
+	$\mathbb{P} (\text{node}~ i \in C_l) = p_{i,l}$ with the constraint that $ \forall i,~ \sum_{l = 1}^k p_{il} = 1$
+\end{rmk}
+\begin{dfn}[$ k $-means]{dfn:k-means}
+	We use the following algorithm~\cite{lloyd-1982}
+	\begin{enumerate}
+	    \item Seeding: Randomly generate ``centroids'' $ \{ \mu_1, \ldots, \mu_k \} = \mu $
+	    \item Assignment: $ \forall i $ assign $ x_i $ to the closest centroid in $ \mu $ and this gives a partition $ \mathcal{C} $
+	    \item Update of $ \mu $: for $ l = 1, \ldots, k $ we compute an updated $ \mu_l' $ where we let
+	    \[
+	    \mu_l' = \frac{1}{| C_{l} |} \sum_{i \in C_l} x_i
+	    \]
+	    and $ | C_{l} | $ is ``the cardinal number of the set $ C_l $.''
+	\end{enumerate}
+	After step $ 3 $, we repeat step $ 2-3 $ until we reach the stopping condition: $\| \mu_{\textsc{new}} - \mu_{\textsc{old}} \| < \delta$ for some tolerance level $ \delta $.
+\end{dfn}
+\begin{theo}[Optimality of $ k $-means]{theo:min-k-means}
+	The process in Definition~\ref{dfn:k-means} solves the objective function
+	\[
+	\underset{\mu, C}{\operatorname{argmin}}  \sum_{l = 1}^k \sum_{i \in C_l} \| x_i - \mu_l \|^2
+	\]
+\end{theo}
+\begin{rmk}[$ k $-means and $ k $-medians]{rmk:k-means-medians}
 The squared $L^2$ norm $\| x_i - \mu_l \|_2^2$ gives the formulation of $k$-means. If using the (unsquared) $L^1$ norm $\| x_i - \mu_l \|_1$, it leads to the objective function of $\textit{k-medians}$. One can also remove the square, that is, using $\| x_i - \mu_l \|_2$ instead of $\| x_i - \mu_l \|_2^2$, which is a mixed $L^2$-$L^1$ norm.
-%We can also use the $L_1$ norm $\| x_i - \mu_l \|$ instead of $\| x_i - \mu_l \|^2$ to retrieve the objective function for $\textit{k-medians}$.
+\end{rmk}
 
-
+\bibliography{clustering}{}
+\bibliographystyle{alpha}
 
 \end{document}
