@@ -206,8 +206,11 @@ where
 \end{theo}
 
 \begin{prf}[Eigenspace of $ \lambda = 0 $ of $\mathcal{L}$, Theorem~\ref{theo:eigenspace}]
-	Suppose $\mathbf{f}$ is an eigenvector with  $\lambda = 0$. So $\mathcal{L}\textbf{f} = \textbf{0}$ and $\textbf{f}^T\mathcal{L}\textbf{f} = \textbf{0}$. We also know $\textbf{f}^T\mathcal{L}\textbf{f} = \textbf{0} = \frac{1}{2} \sum_{(i,j)}w_{i,j}(f_i-f_j)^2$ and $\textbf{f}^T\mathcal{L}\textbf{f} = \textbf{0} \Leftrightarrow f_i=f_j$ whenever $w_{i,j} \textgreater 0$.
-	Thus, $\textbf{f}$ is a piecewise constant in each of the connected components. Meanwhile, for each $v \in$ span $\{\mathbf{1}_{A_{1}}, \ldots, \mathbf{1}_{A_{k}} \}, \mathbf{v}^T \mathcal{L} \mathbf{v} = \mathbf{0}$.
+	Suppose $\mathbf{f}$ is an eigenvector with  $\lambda = 0$.
+  So $\mathcal{L}\textbf{f} = \textbf{0}$ and $\textbf{f}^T\mathcal{L}\textbf{f} = \textbf{0}$.
+  We also know $\textbf{f}^T\mathcal{L}\textbf{f} = \textbf{0} = \frac{1}{2} \sum_{(i,j)}w_{i,j}(f_i-f_j)^2$ and $\textbf{f}^T\mathcal{L}\textbf{f} = \textbf{0} \Leftrightarrow f_i=f_j$ whenever $w_{i,j} > 0$.
+  Thus, $\textbf{f}$ is a piecewise constant in each of the connected components.
+  Meanwhile, for each $v \in$ span $\{\mathbf{1}_{A_{1}}, \ldots, \mathbf{1}_{A_{k}} \}, \mathbf{v}^T \mathcal{L} \mathbf{v} = \mathbf{0}$.
 \end{prf}
 \textbf{Exercise}
 \begin{itemize}
@@ -217,7 +220,7 @@ where
 
 \section{Applications}
 
-\subsection{Spectral vs. $ k $-means Clustering}
+\subsection{Spectral vs. k-means Clustering}
 
 When should we use spectral clustering and when should we use $ k $-means clustering?
 One prototypical example is with spirals.
@@ -227,7 +230,7 @@ Spectral clustering works well where clusters may have many points with small lo
 To analyze this situation, we can use \texttt{R} to study this behavior.
 \lstinputlisting[language=R]{sc_kmeans_example.R}
 
-\subsection{Using $ k $-means on Images}
+\subsection{Using k-means on Images}
 We can also use $ k $-means to compress an image.
 \lstinputlisting[language=R]{kmeans_compression_example.R}
 We can, as an example, compress the Raccoon image in Figure~\ref{fig:raccoon}.
