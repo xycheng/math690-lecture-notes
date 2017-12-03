@@ -3,7 +3,37 @@
 \usepackage[a4paper,margin=2cm]{geometry}
 \usepackage{amsmath, amssymb, amsthm, amsfonts, tikz, algpseudocode}
 \usepackage[plain]{algorithm}
-\usepackage[framemethod=default]{mdframed}
+\usepackage[framemethod=TikZ]{mdframed}
+\definecolor{newblue}{rgb}{0.2,0.2,0.6}
+\usepackage{caption}
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{listings}
+\usepackage{color}
+\usepackage[colorlinks,allcolors=newblue]{hyperref}
+\usepackage{listings}
+\lstset{
+    language=R,
+    basicstyle=\scriptsize\ttfamily,
+    commentstyle=\ttfamily\color{gray},
+    numbers=left,
+    numberstyle=\ttfamily\color{gray}\footnotesize,
+    stepnumber=1,
+    numbersep=5pt,
+    backgroundcolor=\color{white},
+    showspaces=false,
+    showstringspaces=false,
+    showtabs=false,
+    frame=single,
+    tabsize=2,
+    captionpos=b,
+    breaklines=true,
+    breakatwhitespace=false,
+    title=\ttfamily\lstname,
+    escapeinside={},
+    keywordstyle={},
+    morekeywords={}
+}
 
 \theoremstyle{plain}
 \newtheorem*{theorem}{Theorem}
@@ -18,6 +48,27 @@
 \DeclareMathOperator*{\diag}{diag}
 \DeclareMathOperator*{\vol}{Vol}
 
+\newcommand{\handout}[5]{
+   \renewcommand{\thepage}{#1-\arabic{page}}
+   \noindent
+   \begin{center}
+   \framebox{
+      \vbox{
+    \hbox to 5.78in { {\bf MATH 690: Topics in Probablity Theory} \hfill #2 }
+       \vspace{4mm}
+       \hbox to 5.78in { {\Large \hfill #5  \hfill} }
+       \vspace{2mm}
+       \hbox to 5.78in { {\it #3 \hfill #4} }
+      }
+   }
+   \end{center}
+   \vspace*{4mm}
+}
+
+\renewcommand{\paragraph}[1]{\medskip \noindent {\bf #1.}}
+
+\newcommand{\lecture}[4]{\handout{#1}{#2}{Lecturer: #3}{Scribes: #4}{#1}}
+
 %%%% TITLE
 
 \title{Math 690: Topics in Data Analysis and Computation \\
@@ -26,19 +77,21 @@ Lecture notes for October 5, 2017}
 
 \author{Scribed by Dev Dabke and Andrew Cho}
 
+\input{math-boxes}
+
 \begin{document}
-\maketitle
+\lecture{Dimension Reduction}{October 5, 2017}{Xiuyuan Cheng}{Dev Dabke and Andrew Cho}
 
 \section{Introduction}
-The lecture covered the following:
+The lecture covered
 \begin{itemize}
-	\item Continue spectral clustering
+	\item A continuation of spectral clustering
 	\item Graph cut interpretation of spectral clustering
 \end{itemize}
 
-\section{Setup Laplacian for spectral clustering}
+\section{Setup Laplacian for Spectral Clustering}
 $\textit{*Insert joke about creating a subroutine for this setup since we start every class with this}$
-\\ \\ 
+\\ \\
 Recall $ W_{n \times n} $ where $ W = W^{\intercal} $ (i.e.\ symmetric) and $ w_{ij} > 0 $.
 Additionally, let $ d = \diag{d_1, \ldots, d_n} $ where $ d_i = \sum_{j = 0}^{n} w_{ij} $.
 Next, denote
@@ -53,6 +106,7 @@ Recall that if a graph has $ k $ connected components, then the eigenspace of $ 
 \section{Exploring $ \mathcal{L}_{rw} $}
 
 \subsection{Redefining Matrices}
+\label{subsec:redefining}
 
 What if $ \mathcal{L}_{rw} $ instead of $ \mathcal{L}_{un} $?
 We see that $ \mathcal{L}_{rw} = \Psi(1 - \Lambda)\Psi^{\intercal} $ and that $ P = \Psi\Lambda\Psi^{\intercal} $.
@@ -75,15 +129,15 @@ so $ c_1 = \{ 1, \ldots, n_1 \} $ and $ c_2 = \{ n_1 + 1, \ldots, n_1 + n_2 \} $
 
 \subsection{The Special Case of $ k = 2$}
 
-We can write $ \widetilde{\varphi_2} = \alpha \varphi_{1}  + \beta \varphi_{2} $. 
-From $\textbf{section 3.1}$, we know $ \varphi_k^{\intercal} D \varphi_l = 0 $ if $ k \neq l $ and $ \varphi_k^{\intercal} D \varphi_l = 1 $ if $ k = l $. So for $k=2$ we have, 
+We can write $ \widetilde{\varphi_2} = \alpha \varphi_{1}  + \beta \varphi_{2} $.
+From Section~\ref{subsec:redefining}, we know $ \varphi_k^{\intercal} D \varphi_l = 0 $ if $ k \neq l $ and $ \varphi_k^{\intercal} D \varphi_l = 1 $ if $ k = l $. So for $k=2$ we have,
 \begin{align*}
 \widetilde{\varphi_2}^T D \widetilde{\varphi_2} = 1 \implies \alpha^2 + \beta^2 = 1 \\
 \widetilde{\varphi_2}^T D \widetilde{\varphi_1} = 0 \implies \widetilde{\varphi_2}^{\intercal}d = 0
 \end{align*}
 And since $ d = [d_1, \ldots d_n]^{\intercal} $, we have $ \alpha(\varphi_{1}^Td) + \beta(\varphi_{2}^Td) = 0$ and $\alpha\sqrt{\sum_{i \in C_1}d_i}+\beta\sqrt{\sum_{i \in C_2}d_i} = 0$.
 \\ \\
-Now, $ \alpha $ and $ \beta $ should have different signs because $ \widetilde{\varphi_2} = \alpha c_1 \mathbf{1}_{A_1} + \beta c_2 \mathbf{1}_{A_2} $. In other words, 
+Now, $ \alpha $ and $ \beta $ should have different signs because $ \widetilde{\varphi_2} = \alpha c_1 \mathbf{1}_{A_1} + \beta c_2 \mathbf{1}_{A_2} $. In other words,
 
 \[
 \widetilde{\varphi_2} (i) =
@@ -92,7 +146,7 @@ Now, $ \alpha $ and $ \beta $ should have different signs because $ \widetilde{\
   \beta c_2 & if i \in c_2
 \end{cases}
 \]
-Therefore, we can use the signs of $\alpha$ and $\beta$ to get the cluster or in general, we don't have to necessarily cut at zero per say but can tune to any cut-off other than zero. 
+Therefore, we can use the signs of $\alpha$ and $\beta$ to get the cluster or in general, we don't have to necessarily cut at zero per se but can tune to any cut-off other than zero.
 
 \subsection{Deciding $ k $ for spectral clustering}
 
@@ -101,17 +155,17 @@ We could use the log values of the ordered eigenvalues can provide some estimate
 
 \section{Graph Cut}
 
-\begin{remark}
+\begin{rmk}[Graph Cut]{rmk:graph-cut}
 Here we take a graph cut point of view in understanding spectral clustering and why it works. The following is the introduction given by the 2007 Luxburg paper. This wasn't necessarily part of the lecture discussion, but we thought it helps understand the section better.
-\end{remark}
+\end{rmk}
 
 \begin{quote}
-The intuition of clustering is to separate points in different groups according to their similarities. For data given in form of a similarity graph, this problem can be restated as follows: we want to find a partition of the graph such that the edges between different groups have a very low weight (which means that points in different clusters are dissimilar from each other) and the edges within a group have high weight (which means that points within the same cluster are similar to each other). In this section we will see how spectral clustering can be derived as an approximation to such graph partitioning problems (Luxburg '07 pg 8).
+The intuition of clustering is to separate points in different groups according to their similarities. For data given in form of a similarity graph, this problem can be restated as follows: we want to find a partition of the graph such that the edges between different groups have a very low weight (which means that points in different clusters are dissimilar from each other) and the edges within a group have high weight (which means that points within the same cluster are similar to each other). In this section we will see how spectral clustering can be derived as an approximation to such graph partitioning problems.~\cite{luxburg-2007}
 \end{quote}
 
-\subsection{Getting Started}
+\subsection{Foundational Definition}
 
-\begin{definition}[Cut]
+\begin{dfn}[Cut]{dfn:cut}
 
 Let $ A \cap B = \emptyset $ where $ A, B \subset V = \{ 1, \ldots, n \} $.
 Then a cut $ W(A, B) $ is defined as
@@ -119,51 +173,56 @@ Then a cut $ W(A, B) $ is defined as
 W(A, B) = \sum_{i \in A, j \in B} w_{ij}
 \]
 
-\end{definition}
+\end{dfn}
 
-\begin{definition}[Volume Set]
+\begin{dfn}[Volume Set]{dfn:volume-set}
 
 $ \vol(A) = \sum_{i \in A} d_i $ is the sum of degrees.
 
-\end{definition}
+\end{dfn}
 
-\begin{definition}[Normalized Cut Partition]
+\begin{dfn}[Normalized Cut Partition]{dfn:normalized-cut-partition}
 Let $ C = \{ C_1, \ldots, C_k \} $ and denote
 \[
 NCut(C) = \frac{ \sum_{l = 1}^k W(C_1, C_l^c) }{ \vol{C_l} }
 \]
 
-\end{definition}
+\end{dfn}
 
-\begin{proposition}
+\begin{theo}[NCut]{theo:ncut}
   \begin{align*}
     NCut(C) &= \sum_{l = 1}^{k} \varphi_l^{\intercal} L \varphi_{l} \\
     \varphi_l &= c_{l} \mathbf{1_{c_{l}}} & l = 1, \ldots, k \\
     c_l &= \frac{1}{\sqrt{\vol{C_l}}}
   \end{align*}
-\end{proposition}
+\end{theo}
 
-\begin{proof}
+\begin{prf}[NCut, Theorem~\ref{theo:ncut}]{prf:ncut}
 	\begin{align*}
 		\varphi_l^{\intercal} L \varphi_{l} &= \frac{1}{2} \sum_{ij} w_{ij}(\varphi_l(i) - \varphi_l(j))^2 \\
 		&= \sum_{i \in C_l, j \in C_l^c} w_{ij} (\frac{1}{Vol(C_l)} - 0)^2 \\
 		&= \sum_{i \in C_ll, j \in C_l^c} w_{ij} \frac{1}{Vol(C_l)} \\
 		&= \frac{W(C_l,C_l^c)}{Vol(C_l)}
 	\end{align*}
-\end{proof}
+\end{prf}
 
 \subsection{Problem of Min NCut}
-
-Let $ H $ be the matrix such that $ H = [\varphi_1, \ldots, \varphi_k] $.
-Then, the minimum $ NCut $ over the $ C $s is the trace of $ H^{\intercal} L H $.
-\\ \\
+\begin{dfn}[Min NCut]{dfn:min-ncut}
+	Let $ H $ be the matrix such that $ H = [\varphi_1, \ldots, \varphi_k] $.
+	Then, the minimum $ NCut $ over the $ C $s is the trace of $ H^{\intercal} L H $.
+\end{dfn}
+\begin{dfn}[Spectral Min NCut]{dfn:spectral-min-ncut}
 The spectral minimum $ NCut $ is defined to be the above trace, but where $ H^{\intercal} D H = I_{k} $.
-\begin{proposition}
+\end{dfn}
+\begin{theo}[Solution of Spectral Min NCut]{theo:sol-spectral-min-ncut}
   The solution of the spectral minimum $ NCut $ is the first $ k $ eigenvectors of $ \mathcal{L}_{rw} $ normalized.
-\end{proposition}
+\end{theo}
 
 \subsection{Next class}
 
 We will discuss which Laplacian to use between $\mathcal{L}_{un}$, $\mathcal{L}_{rw}$, and $\mathcal{L}_{sym}$ next class.
+
+\bibliography{clustering}{}
+\bibliographystyle{alpha}
 
 \end{document}

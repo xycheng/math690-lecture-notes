@@ -3,8 +3,37 @@
 \usepackage[a4paper,margin=2cm]{geometry}
 \usepackage{amsmath, amssymb, amsthm, amsfonts, tikz, algpseudocode}
 \usepackage[plain]{algorithm}
-\usepackage[framemethod=default]{mdframed}
-\usepackage{dsfont}
+\usepackage[framemethod=TikZ]{mdframed}
+\definecolor{newblue}{rgb}{0.2,0.2,0.6}
+\usepackage{caption}
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{listings}
+\usepackage{color}
+\usepackage[colorlinks,allcolors=newblue]{hyperref}
+\usepackage{listings}
+\lstset{
+    language=R,
+    basicstyle=\scriptsize\ttfamily,
+    commentstyle=\ttfamily\color{gray},
+    numbers=left,
+    numberstyle=\ttfamily\color{gray}\footnotesize,
+    stepnumber=1,
+    numbersep=5pt,
+    backgroundcolor=\color{white},
+    showspaces=false,
+    showstringspaces=false,
+    showtabs=false,
+    frame=single,
+    tabsize=2,
+    captionpos=b,
+    breaklines=true,
+    breakatwhitespace=false,
+    title=\ttfamily\lstname,
+    escapeinside={},
+    keywordstyle={},
+    morekeywords={}
+}
 
 \theoremstyle{plain}
 \newtheorem*{theorem}{Theorem}
@@ -19,6 +48,27 @@
 \DeclareMathOperator*{\diag}{diag}
 \DeclareMathOperator*{\vol}{Vol}
 
+\newcommand{\handout}[5]{
+   \renewcommand{\thepage}{#1-\arabic{page}}
+   \noindent
+   \begin{center}
+   \framebox{
+      \vbox{
+    \hbox to 5.78in { {\bf MATH 690: Topics in Probablity Theory} \hfill #2 }
+       \vspace{4mm}
+       \hbox to 5.78in { {\Large \hfill #5  \hfill} }
+       \vspace{2mm}
+       \hbox to 5.78in { {\it #3 \hfill #4} }
+      }
+   }
+   \end{center}
+   \vspace*{4mm}
+}
+
+\renewcommand{\paragraph}[1]{\medskip \noindent {\bf #1.}}
+
+\newcommand{\lecture}[4]{\handout{#1}{#2}{Lecturer: #3}{Scribes: #4}{#1}}
+
 %%%% TITLE
 
 \title{Math 690: Topics in Data Analysis and Computation \\
@@ -27,11 +77,13 @@ Lecture notes for October 12, 2017}
 
 \author{Scribed by Dev Dabke and Andrew Cho}
 
+\input{math-boxes}
+
 \begin{document}
-\maketitle
+\lecture{Dimension Reduction}{October 12, 2017}{Xiuyuan Cheng}{Dev Dabke and Andrew Cho}
 
 \section{Introduction}
-The lecture covered the following on the $\textbf{consistency of spectral clustering}$:
+The lecture covered the following on the consistency of spectral clustering
 \begin{itemize}
 	\item Setup of $\mathcal{L}_{un}$ and $\mathcal{L}_n$ and their limit operators $U$ and $U'$
 	\item First $r$ spectral convergence
@@ -43,7 +95,6 @@ The lecture covered the following on the $\textbf{consistency of spectral cluste
 \subsection{The Problem Setup}
 
 Suppose $ X_{i} \sim P $ where $ P $ is some distribution on $ \Omega \subset \mathbb{R}^{D} $.
-
 $ W_{ij} $ is the affinity matrix where, as an example,
 \[
 W_{ij} = e^{\frac{-|x_i - x_j|^2}{\varepsilon}}
@@ -58,26 +109,27 @@ As $ n \to \infty $, we want to show the convergence of the graph Laplacian $ \m
 \end{enumerate}
 
 \subsection{Limit operators $U$ and $U'$}
-We construct linear limit operators $U$ and $U'$ on $C(X)$ which are the limit of the discrete operators $\mathcal{L}_n$ and $\mathcal{L}_n'$. We prove that the first "r" eigenvectors of the discrete operators converge to eigenfuction  of the limit operators. 
-\\ \\
-Here, $U$ is defined as follows:
-\begin{align*}
-  U &: C(\Omega) \to C(\Omega) \\
-  Uf(x) &= f(x)d(x) - \int k(x, y) f(y) dP(y)
-\end{align*}
-where
-\begin{align*}
-  dP(x) &= p(x)dx \\
-  dx &= \int k(x, y) dP(y) \\
-  x \in \Omega
-\end{align*}
+We construct linear limit operators $U$ and $U'$ on $C(X)$ which are the limit of the discrete operators $\mathcal{L}_n$ and $\mathcal{L}_n'$. We prove that the first "r" eigenvectors of the discrete operators converge to eigenfuction  of the limit operators.
+\begin{dfn}[Limit Operators]{dfn:limit-operators}
+	We define $ U $ as
+	\begin{align*}
+	  U &: C(\Omega) \to C(\Omega) \\
+	  Uf(x) &= f(x)d(x) - \int k(x, y) f(y) dP(y)
+	\end{align*}
+	where
+	\begin{align*}
+	  dP(x) &= p(x)dx \\
+	  dx &= \int k(x, y) dP(y) \\
+	  x \in \Omega
+	\end{align*}
+\end{dfn}
+\begin{theo}[$ U' $]{theo:u-prime}
+	\[
+	U' f(x) = f(x) - \int{ \frac{ k(x, y) }{ \sqrt{ d(x) } \sqrt{ d(y) } } f(y) dP(y) }
+	\]
+\end{theo}
 
-$U'$ is derived and proved as follows:
-\[
-U' f(x) = f(x) - \int{ \frac{ k(x, y) }{ \sqrt{ d(x) } \sqrt{ d(y) } } f(y) dP(y) }
-\]
-
-\begin{proof}
+\begin{prf}[$ U' $, Theorem~\ref{theo:u-prime}]{prf:u-prime}
 
   \begin{align*}
     (D^{-\frac{1}{2}} W D^{-\frac{1}{2}})_{ij} &= \frac{1}{\sqrt{D_{ii}}} W_{ij} \frac{1}{\sqrt{D_{jj}}} \\
@@ -85,82 +137,60 @@ U' f(x) = f(x) - \int{ \frac{ k(x, y) }{ \sqrt{ d(x) } \sqrt{ d(y) } } f(y) dP(y
     &\approx \frac{ \frac{1}{n} k(x_i, x_j) }{ \sqrt{d(x_i)} \sqrt{d(x_j)} } \\
   \end{align*}
 
-\end{proof}
+\end{prf}
 
 \subsection{First $ r $ spectral convergence}
 
-Let's discuss what "first $r$ spectral convergence means. $ M_n $ first $r$ spectral convergence to T if first r eigenvalues of $ M_n $ converge to those of T, and the associated eigenvectors converge to the eigenfunctions of T, the first smallest r eigenvalues.
+Let's discuss what ``first $ r $ spectral convergence'' means.
+$ M_n $ first $ r $ spectral convergence to T if first $ r $ eigenvalues of $ M_n $ converge to those of $ T $, and the associated eigenvectors converge to the eigenfunctions of $ T $, the first smallest $ r $ eigenvalues.
 
-\begin{theorem}
+\begin{theo}[Convergence]{theo:convergence}
 For fixed $r > 0$, $n \rightarrow \infty$, and mild conditions,
 	\begin{enumerate}
-	\item ($\textbf{unnormalized}$) $\mathcal{L}_n$ first r spectral converge to $ U $ if the first r eigenvalues of $ U $ lie outside of the range of the degree function $ d(x) $. We need extra constraints for convergence since $ U $ might coincide with the range of $ d(x) $. 	
-	\item ($\textbf{normalized symmetric}$) $\mathcal{L}_n'$ first r spectral converge to the operator $ U' $. 
+	\item ($\textbf{Unnormalized}$) $\mathcal{L}_n$ first r spectral converge to $ U $ if the first r eigenvalues of $ U $ lie outside of the range of the degree function $ d(x) $. We need extra constraints for convergence since $ U $ might coincide with the range of $ d(x) $.
+	\item ($\textbf{Normalized Symmetric}$) $\mathcal{L}_n'$ first r spectral converge to the operator $ U' $.
 	\end{enumerate}
-\end{theorem}
+\end{theo}
 
-\begin{proof}
-(Case 2 $\mathcal{L}_{sym}$) Have $M_n$ converge to $T$ where 	
+\begin{prf}[Convergence, Theorem~\ref{theo:convergence}]{prf:convergence}
+(Case 2 $\mathcal{L}_{sym}$) Have $M_n$ converge to $T$ where
 	\begin{align*}
-	&M_n: \mathds{R}^n \rightarrow \mathds{R}^n \\
-	&T: C(\Omega) \rightarrow C(\Omega) \\
-	&M_n: I-D^{\frac{-1}{2}}WD^{\frac{-1}{2}} \\
-	&T = U'
-	\end{align*}	
+		M_n &: \mathbb{R}^n \rightarrow \mathbb{R}^n \\
+		T &: C(\Omega) \rightarrow C(\Omega) \\
+		M_n &: I-D^{\frac{-1}{2}}WD^{\frac{-1}{2}} \\
+		T &= U'
+	\end{align*}
 
 	\begin{align*}
 	Tf(x) &= f(x) - \int h(x,y)f(y)dP(y) \\
 	&= f(x) - \int h(x,y)f(y)dP_n(y) \\
 	&= f(x) - \frac{1}{n} \sum_{i=1}^n h(x,x_i)f(x_i)
 	\end{align*}
-where
+	where
 	\begin{align*}
 	&h(x,y) = \frac{k(x,y)}{\sqrt{d(x)}\sqrt{d(y)}} \\
 	&dP_n(x) = \frac{1}{n} \sum_{i=1}^n \delta_{x_i}(x) dx
-	\end{align*} 
-	
-\end{proof}
-
-$\textbf{Lemma 1}$ (spectral equivalence between $M_n$ and $T_n$)
-\begin{enumerate}
-\item If $T_n \varphi = \lambda \varphi$, let $v \in \mathds{R}^n, i = 1,...,n v_i = \varphi(x_i)$, then $M_nv = \lambda v$. 
-\item If $M_nv = \lambda v$ and $\lambda \neq 1$, then let $\varphi = \frac{\frac{1}{n} \sum h(x,x_j)v_j}{1-\lambda}$ and so then $T_n\varphi = \lambda\varphi$.
-\end{enumerate}
-
-$\textbf{Lemma 2}$ (replacing $dP_n(y)$ to be $dP(y)$, $T_n$ first spectral converge to T)
-
-\begin{proof}
-For all $f$, $T_n \rightarrow Tf$ by Law of Large Numbers. $\|T_nf - Tf\|_{\inf} \rightarrow 0$ simultaneously for "sufficiently many" $f$ such that for each eigenvalue of $T (\lambda \neq 1)$, the associated eigenvalue of $T_n$ converge to $\lambda$ and the associated eigenfunction of $T_n$ converges. In other words, 
-$ T_n \varphi_n = \lambda_n \varphi_n $ so $ \lambda_n \rightarrow$asymptotically 
-$T\varphi = \lambda \varphi$ and $ \| \varphi_n- \varphi \|_{\infty} \rightarrow 0$
-\end{proof}
-
-$\textbf{Remark}$ (Bochner's Theorem) \\
-$W$ is a PSD where $W_{ij}$ comes from Gaussian kernel $\frac{e^{-|x_i - x_j|^2}}{\epsilon}$. This implies $D^{-\frac{1}{2}}WD^{-\frac{1}{2}})$ is PSD. Thus, we have $\mathcal{L} = I - D^{-\frac{1}{2}}WD{-\frac{1}{2}},$ with eigenvalues on [0,1] since eigenvalues of $D^{-\frac{1}{2}}WD{-\frac{1}{2}} \in [0,1)$
-
-\begin{proposition}
-P is a density in $\mathds{R}^D$. We have the usual Gaussian kernel $\frac{e^{-|x_i - x_j|^2}}{\epsilon}$ where $\epsilon > 0$. 
-	\begin{enumerate}
-	\item k(x,y) is PSD kernel, ie. $\forall f$ and $\int f(x)^2p(x)dx < \infty$, $\int_\Omega \int_\Omega k(x,y)f(x)f(y) p(x) dx p(y) dy \geq 0$. 
-	\item $W_{ij} = (k(x_i,x_j))_{1 \leq i, j \leq n}.$ We know W is PSD, so $\forall v \in \mathds{R}^n$, $v^TWv \geq 0$. 
-	\end{enumerate}
-\end{proposition} 
-
-\begin{proof}
-By Fourier Transform,
-$$ k(x,y) = g(x-y) = \int_\mathds{R}^D \hat{g}(\xi)e^{i\xi^T(x-y)}d\xi $$
-
-	\begin{align*}
-	\forall v \in \mathds{R}^n, v^TWv = \ &=\sum_{ij}v_i v_j W_{ij} \\
-	&= \sum_{ij} v_i v_j k(x_i,x_j) \\
-	&= \sum v_i v_j \int \hat{g}(\xi)e^{i\xi^Tx_i}e^{-i\xi^Tx_j} d\xi \\
-	&= \int_\mathds{R}^D \hat{g}(\xi)(\sum_i^n \sum_j^n v_i e^{i\xi^Tx_i} v_j e^{-i\xi^Tx_j} d\xi) \\
-	&= \int_\mathds{R} \hat{g}(\xi)(\sum v_i e^{i\xi^Tx_I})\overline{(\sum v_j e^{i\xi^Tx_j}}) \\
-	&= \int \hat{g}(\xi) V(\xi) \overline{V(\xi)} d\xi \\
-	&= \int \hat{g}(\xi) |V(\xi)|^2 d\xi \geq 0
 	\end{align*}
-since $\hat{g}(\xi) = e^{-a|\xi|^2} \implies \hat{g} > 0,  \forall \xi$ 
-\end{proof}
 
+\end{prf}
+
+\begin{lem}[Spectral Equivalence between $M_n$ and $T_n$]{lem:spectral-equivalence}
+	\begin{enumerate}
+	\item If $T_n \varphi = \lambda \varphi$, let $v \in \mathbb{R}^n, i = 1,...,n v_i = \varphi(x_i)$, then $M_nv = \lambda v$.
+	\item If $M_nv = \lambda v$ and $\lambda \neq 1$, then let $\varphi = \frac{\frac{1}{n} \sum h(x,x_j)v_j}{1-\lambda}$ and so then $T_n\varphi = \lambda\varphi$.
+	\end{enumerate}
+\end{lem}
+
+\begin{lem}[Spectral Convergence]{lem:spectral-convergence}
+	Replacing $ dP_n(y) $ to be $ dP(y) $, $ T_n $ spectral converges to $ T $.
+\end{lem}
+
+\begin{prf}[Spectral Convergence, Lemma~\ref{lem:spectral-convergence}]{prf:spectral-convergence}
+For all $f$, $T_n \rightarrow Tf$ by the Law of Large Numbers.
+$ \|T_nf - Tf\|_{\inf} \rightarrow 0 $ simultaneously for ``sufficiently many'' $ f $ such that for each eigenvalue of $ T (\lambda \neq 1) $, the associated eigenvalue of $T_n$ converge to $\lambda$ and the associated eigenfunction of $T_n$ converges.
+In other words,
+$ T_n \varphi_n = \lambda_n \varphi_n $ so $ \lambda_n \rightarrow$asymptotically
+$T\varphi = \lambda \varphi$ and $ \| \varphi_n- \varphi \|_{\infty} \rightarrow 0$
+\end{prf}
 
 \end{document}
