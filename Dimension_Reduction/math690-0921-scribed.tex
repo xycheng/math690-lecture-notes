@@ -174,17 +174,20 @@ We state some properties of the Laplace-Beltrami operator:
 \begin{itemize}
 \item $\Delta_M$ is a linear operator that is positive semidefinite with a discrete spectrum of eigenvalues $\{\lambda_k\}, 0 \leq \lambda_1 \leq \lambda_2 \leq ... $;
 \item all eigenfunctions of $\Delta_M$ are in $C^\infty(M)$.
-\item the operator is "intrinsic" -- it only sees the inner product $g$ but not the specific embedding space.
+\item the operator is "intrinsic" -- it only sees the Riemannian metric tensor $g$ but not the specific embedding in the high-dimensional ambient space.
 \end{itemize}
 \end{remark}
-\begin{theorem}
-If the point cloud $\{\mathbf{x}_i\}_{i=1}^n$ is i.i.d. sampled uniformly from the manifold $M$ and $\epsilon$ properly set, as $n \rightarrow \infty$,  for each $k$,
-$\widehat{\lambda_{k}} \rightarrow \lambda_{k}$ and $\widehat{\boldsymbol{\psi}_k} \rightarrow \boldsymbol{\psi}$ in probability, where $\widehat{\lambda_{k}}$ and $\widehat{\boldsymbol{\psi}_k}$ is the kth eigenvalue-eigenvector pair of the \textcolor{red}{normalized?} graph Laplacian, while $\lambda_{k}$ and $\boldsymbol{\psi}_k$ is the kth eigenvalue-eigenfunction pair of the Laplace-Beltrami operator. More precisely, $\widehat{\boldsymbol{\psi}_k} \rightarrow \boldsymbol{\psi}$ means $\widehat{\boldsymbol{\psi}_k}(i) \rightarrow \boldsymbol{\psi}_k(\boldsymbol{x}_i), \;\; \forall i=1 \; ,...,\; n$.
+\begin{theorem}\cite{belkin2007convergence}
+If the point cloud $\{\mathbf{x}_i\}_{i=1}^n$ are i.i.d. sampled uniformly from manifold $M$ and $\epsilon_n$ properly set so that $\epsilon_n \to 0$ as $n \to \infty$,
+
+\medskip
+then for each $k$,
+$\widehat{\lambda_{k}} \rightarrow \lambda_{k}$ and $\widehat{\boldsymbol{\psi}_k} \rightarrow \boldsymbol{\psi}$ in probability as $n \to \infty$, where $\widehat{\lambda_{k}}$ and $\widehat{\boldsymbol{\psi}_k}$ are the kth eigenvalue-eigenvector pair of the normalized graph Laplacian, while $\lambda_{k}$ and $\boldsymbol{\psi}_k$ are the kth eigenvalue-eigenfunction pair of the Laplace-Beltrami operator. More precisely, $\widehat{\boldsymbol{\psi}_k} \rightarrow \boldsymbol{\psi}$ means $\widehat{\boldsymbol{\psi}_k}(i) \rightarrow \boldsymbol{\psi}_k(\boldsymbol{x}_i), \;\; \forall i=1 \; ,...,\; n$.
 \end{theorem}
 \begin{remark}
 When the point cloud is not uniformly sampled from M but instead sampled from a distribution $p$, the convergence result is as follows:
 \begin{equation}
-\lim_{n\rightarrow \infty, \epsilon \rightarrow 0} L_{n,\epsilon} \rightarrow -\frac{\epsilon}{2}(\Delta_M + 2\frac{\nabla p}{p} \cdot \nabla) + O(\epsilon^2)
+\lim_{n\rightarrow \infty, \epsilon \rightarrow 0} \frac{1}{\epsilon} L_{n,\epsilon} \to -\frac{1}{2}(\Delta_M + 2\frac{\nabla p}{p} \cdot \nabla) + O(\epsilon)
 \end{equation}
 \end{remark}
 
@@ -202,4 +205,8 @@ Let $P$ be such that $P_{ij} = \frac{W_{ij}}{\sum_{j'=1}^{n}W_{ij'}}$, and initi
 The loss function $C(Y)$ is formulated using KL-divergence and the optimization for $Y$ is as follows:
 \[\min_{Y}C(Y) = \sum_{i \neq j}\overline{P}_{ij}log\frac{\overline{P}_{ij}}{Q_{ij}}\].
 \end{steps}
+
+\bibliographystyle{alpha}
+\bibliography{bib}
+
 \end{document}
