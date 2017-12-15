@@ -78,13 +78,13 @@ Lecture notes for October 3, 2017}
 \input{math-boxes}
 
 \begin{document}
-\lecture{Dimension Reduction}{October 3, 2017}{Xiuyuan Cheng}{Dev Dabke and Andrew Cho}
+\lecture{Clustering}{October 3, 2017}{Xiuyuan Cheng}{Dev Dabke and Andrew Cho}
 
 \section{Introduction}
 The lecture covered
 \begin{itemize}
-	\item A discussion KK10 paper on consistency of Lloyd's k-means algorithm
-	\item An introduction to spectral clustering
+	\item A discussion of KK10 paper on the consistency of Lloyd's k-means algorithm
+	\item An introduction to Spectral Clustering
 \end{itemize}
 
 \section{k-means clustering}
@@ -108,7 +108,7 @@ Can these seeding methods lead to the true centroids?
 
 \subsection{Strong Law of Large Numbers}
 \label{subsec:slln}
-\begin{dfn}[Laplacian]{dfn:laplacian}
+\begin{dfn}[Loss]{dfn:loss}
 	\[
 	\mathcal{L}_n (\mu) = \int \| x - \mu \|^2 d P_n(x)
 	\]
@@ -175,8 +175,8 @@ Given some data $ \{ x_i \}_{i = 1}^n $ and $ k $, we want to
   \item Apply k means to $ \Psi = [\varphi_i, \ldots, \varphi_k]_{n \times k} $ and denote $ y_i $ as the $ i^{th} $ row of $ \Psi $.
 \end{enumerate}
 
-\begin{rmk}[Truncation]{rmk:truncation}
-  If $ k = 2$, you can use truncation because the first eigenvalue is constant. Thus, you can use sign($\Psi_2$) to indicate clustering.
+\begin{rmk}[Thresholding]{rmk:truncation}
+  If $ k = 2$, you can use thresholding because the first eigenvalue is constant. Thus, you can use sign($\Psi_2$) to indicate clustering.
 \end{rmk}
 
 \begin{dfn}[Connected Components]{dfn:connected-components}

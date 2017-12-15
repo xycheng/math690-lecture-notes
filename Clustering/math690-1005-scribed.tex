@@ -80,7 +80,7 @@ Lecture notes for October 5, 2017}
 \input{math-boxes}
 
 \begin{document}
-\lecture{Dimension Reduction}{October 5, 2017}{Xiuyuan Cheng}{Dev Dabke and Andrew Cho}
+\lecture{Clustering}{October 5, 2017}{Xiuyuan Cheng}{Dev Dabke and Andrew Cho}
 
 \section{Introduction}
 The lecture covered
@@ -142,8 +142,8 @@ Now, $ \alpha $ and $ \beta $ should have different signs because $ \widetilde{\
 \[
 \widetilde{\varphi_2} (i) =
 \begin{cases}
-  \alpha c_1 & if i \in c_1 \\
-  \beta c_2 & if i \in c_2
+  \alpha c_1 & if~ i \in c_1 \\
+  \beta c_2 & if~ i \in c_2
 \end{cases}
 \]
 Therefore, we can use the signs of $\alpha$ and $\beta$ to get the cluster or in general, we don't have to necessarily cut at zero per se but can tune to any cut-off other than zero.
@@ -175,13 +175,13 @@ W(A, B) = \sum_{i \in A, j \in B} w_{ij}
 
 \end{dfn}
 
-\begin{dfn}[Volume Set]{dfn:volume-set}
+\begin{dfn}[Volume of a Set]{dfn:volume-set}
 
 $ \vol(A) = \sum_{i \in A} d_i $ is the sum of degrees.
 
 \end{dfn}
 
-\begin{dfn}[Normalized Cut Partition]{dfn:normalized-cut-partition}
+\begin{dfn}[Normalized Cut (NCut) of a Partition]{dfn:normalized-cut-partition}
 Let $ C = \{ C_1, \ldots, C_k \} $ and denote
 \[
 NCut(C) = \frac{ \sum_{l = 1}^k W(C_1, C_l^c) }{ \vol{C_l} }

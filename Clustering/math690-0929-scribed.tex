@@ -42,7 +42,7 @@ Lecture notes for September 29, 2017}
 \input{math-boxes}
 
 \begin{document}
-\lecture{Dimension Reduction}{September 29, 2017}{Xiuyuan Cheng}{Dev Dabke and Andrew Cho}
+\lecture{Dimension Reduction, Clustering}{September 29, 2017}{Xiuyuan Cheng}{Dev Dabke and Andrew Cho}
 
 \section{Introduction}
 The lecture covered
@@ -104,7 +104,7 @@ such that $ k = 1, \ldots, d $.
 	by Fokker-Planck.
 \end{rmk}
 We have to perform a ``correction'' of density by defining a Weight Matrix $ W $ such that $ W_{ij} = k(x_i, x_j) $.
-\begin{dfn}[Affinity Matrix]{dfn:affinity}
+\begin{dfn}[Density corrected affinity matrix]{dfn:affinity}
 	Let
 	\begin{align*}
 		d_i &= \sum_{j} k(x_i, x_j) \\
@@ -122,7 +122,7 @@ and we let
 \widetilde{W_{ij}} = \frac{W_{ij}}{\sqrt{d(x)} \sqrt{d(y)}}
 \]
 and so consider the eigenmap from $ \widetilde{W} $ instead of $ W $.
-\begin{theo}[Convergence of $ L $]{theo:convergence}
+\begin{theo}[Convergence of $ L $ under correction]{theo:convergence}
 	Given the matrix $ \widetilde{L}_{rw} = I - \widetilde{D}^{-1} \widetilde{W} $ where
 	\[
 	\widetilde{D}_{ij} = \sum_j \widetilde{W}_{ij}
