@@ -169,8 +169,8 @@ Given some data $ \{ x_i \}_{i = 1}^n $ and $ k $, we want to
   Note that
   \begin{align*}
     L_{un} &= D - W  & \text{Unnormalized} \\
-    L_{rw} &= D^{-1} (D - W) & \text{Shi-Malik '00} \\
-    L_{sym} &= I - D^{-1/2} W D^{-1/2} & \text{Ng-Jordan-Weiss '02}
+    L_{rw} &= D^{-1} (D - W) & \text{\cite{shi-2000}} \\
+    L_{sym} &= I - D^{-1/2} W D^{-1/2} & \text{\cite{ng-2001}}
   \end{align*}
   \item Apply k means to $ \Psi = [\varphi_i, \ldots, \varphi_k]_{n \times k} $ and denote $ y_i $ as the $ i^{th} $ row of $ \Psi $.
 \end{enumerate}
@@ -225,9 +225,9 @@ where
 When should we use spectral clustering and when should we use $ k $-means clustering?
 One prototypical example is with spirals.
 $ k $-means excels when the clusters are assumed to be dense point clouds separated from other dense point clouds.
-Spectral clustering works well where clusters may have many points with small local distances (with some metric), i.e.\ concentric circles. The connective relation between clusters are more important for spectral clustering. 
+Spectral clustering works well where clusters may have many points with small local distances (with some metric), i.e.\ concentric circles. The connective relation between clusters are more important for spectral clustering.
 \\ \\
-Spectral clustering can perform as well as $ k $-means in most clustering tasks. But one disadvantage of spectral clustering is its \textit{computational expense}. It requires an additional step in computing the affinity matrix. Furthermore, for a data set of N points and P features, the dimension for $ k $-means is N $\times$ P, whereas it is N $\times$ N for spectral clustering. 
+Spectral clustering can perform as well as $ k $-means in most clustering tasks. But one disadvantage of spectral clustering is its \textit{computational expense}. It requires an additional step in computing the affinity matrix. Furthermore, for a data set of N points and P features, the dimension for $ k $-means is N $\times$ P, whereas it is N $\times$ N for spectral clustering.
 \\ \\
 To analyze this situation, we can use \texttt{R} to study this behavior.
 \begin{figure}[H]
@@ -242,9 +242,9 @@ To analyze this situation, we can use \texttt{R} to study this behavior.
 \lstinputlisting[language=R]{sc_kmeans_example.R}
 
 \subsection{Using k-means on Images}
-We can also use $ k $-means to compress an image. Though not an immediately obvious application of clustering, image compression can rely on $ k $-means to cluster pixel values represented by 0 to 255. Thus, if we have uni-color photo that is defined by pixel values 0 to 255, we can find $ k $ groups to cluster pixels and compress the original image using $ k $ pixel values. 
+We can also use $ k $-means to compress an image. Though not an immediately obvious application of clustering, image compression can rely on $ k $-means to cluster pixel values represented by 0 to 255. Thus, if we have uni-color photo that is defined by pixel values 0 to 255, we can find $ k $ groups to cluster pixels and compress the original image using $ k $ pixel values.
 \\ \\
-We can, as an example, compress the Raccoon image in Figure~\ref{fig:raccoon}. The original image and compression from $ k $ = 2, 4, and 6 are shown as examples. 
+We can, as an example, compress the Raccoon image in Figure~\ref{fig:raccoon}. The original image and compression from $ k $ = 2, 4, and 6 are shown as examples.
 \begin{figure}[H]
   \captionsetup{width=0.8\textwidth}
   \centering
