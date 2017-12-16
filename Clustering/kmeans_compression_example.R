@@ -61,6 +61,7 @@ compress = function(k, data){
   image(1:1024, 1:768, t(new_m), col = gray((0:32)/32), useRaster = TRUE)
 }
 
+par(mfrow = c(2,2))
 original = readPNG("raccoon.png")
 original = apply(original, 2, rev)
 image(1:1024, 1:768, t(original), col = gray((0:32)/32), useRaster = TRUE)
@@ -71,3 +72,6 @@ compress(2, photo); title(main = "k = 2")
 
 # testing k = 4
 compress(4, photo); title(main = "k = 4")
+
+# testing k = 6
+compress(6, photo); title(main = "k = 6")

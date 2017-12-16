@@ -156,11 +156,11 @@ We could use the log values of the ordered eigenvalues can provide some estimate
 \section{Graph Cut}
 
 \begin{rmk}[Graph Cut]{rmk:graph-cut}
-Here we take a graph cut point of view in understanding spectral clustering and why it works. The following is the introduction given by the 2007 Luxburg paper. This wasn't necessarily part of the lecture discussion, but we thought it helps understand the section better.
+Here we take a graph cut point of view in understanding spectral clustering and why it works. The following is the introduction given by Luxburg '07 ~\cite{luxburg-2007}. This wasn't necessarily part of the lecture discussion, but we thought it helps understand the section better.
 \end{rmk}
 
 \begin{quote}
-The intuition of clustering is to separate points in different groups according to their similarities. For data given in form of a similarity graph, this problem can be restated as follows: we want to find a partition of the graph such that the edges between different groups have a very low weight (which means that points in different clusters are dissimilar from each other) and the edges within a group have high weight (which means that points within the same cluster are similar to each other). In this section we will see how spectral clustering can be derived as an approximation to such graph partitioning problems.~\cite{luxburg-2007}
+"The intuition of clustering is to separate points in different groups according to their similarities. For data given in form of a similarity graph, this problem can be restated as follows: we want to find a partition of the graph such that the edges between different groups have a very low weight (which means that points in different clusters are dissimilar from each other) and the edges within a group have high weight (which means that points within the same cluster are similar to each other). In this section we will see how spectral clustering can be derived as an approximation to such graph partitioning problems."~\cite{luxburg-2007}
 \end{quote}
 
 \subsection{Foundational Definition}
@@ -184,7 +184,7 @@ $ \vol(A) = \sum_{i \in A} d_i $ is the sum of degrees.
 \begin{dfn}[Normalized Cut (NCut) of a Partition]{dfn:normalized-cut-partition}
 Let $ C = \{ C_1, \ldots, C_k \} $ and denote
 \[
-NCut(C) = \frac{ \sum_{l = 1}^k W(C_1, C_l^c) }{ \vol{C_l} }
+NCut(C) = \sum_{l = 1}^k \frac{W(C_1, C_l^c) }{ \vol{(C_l)} }
 \]
 
 \end{dfn}

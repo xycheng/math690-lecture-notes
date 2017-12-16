@@ -225,15 +225,26 @@ where
 When should we use spectral clustering and when should we use $ k $-means clustering?
 One prototypical example is with spirals.
 $ k $-means excels when the clusters are assumed to be dense point clouds separated from other dense point clouds.
-Spectral clustering works well where clusters may have many points with small local distances (with some metric), i.e.\ concentric circles.
+Spectral clustering works well where clusters may have many points with small local distances (with some metric), i.e.\ concentric circles. The connective relation between clusters are more important for spectral clustering. 
+\\ \\
+Spectral clustering can perform as well as $ k $-means in most clustering tasks. But one disadvantage of spectral clustering is its \textit{computational expense}. It requires an additional step in computing the affinity matrix. Furthermore, for a data set of N points and P features, the dimension for $ k $-means is N $\times$ P, whereas it is N $\times$ N for spectral clustering. 
 \\ \\
 To analyze this situation, we can use \texttt{R} to study this behavior.
+\begin{figure}[H]
+  \captionsetup{width=0.8\textwidth}
+  \centering
+  \includegraphics[width=\textwidth]{sckmeans}
+  \caption{
+      Example of spectral clustering vs.  k-means.
+  }
+  \label{fig:sckmeans}
+\end{figure}
 \lstinputlisting[language=R]{sc_kmeans_example.R}
 
 \subsection{Using k-means on Images}
-We can also use $ k $-means to compress an image.
-\lstinputlisting[language=R]{kmeans_compression_example.R}
-We can, as an example, compress the Raccoon image in Figure~\ref{fig:raccoon}.
+We can also use $ k $-means to compress an image. Though not an immediately obvious application of clustering, image compression can rely on $ k $-means to cluster pixel values represented by 0 to 255. Thus, if we have uni-color photo that is defined by pixel values 0 to 255, we can find $ k $ groups to cluster pixels and compress the original image using $ k $ pixel values. 
+\\ \\
+We can, as an example, compress the Raccoon image in Figure~\ref{fig:raccoon}. The original image and compression from $ k $ = 2, 4, and 6 are shown as examples. 
 \begin{figure}[H]
   \captionsetup{width=0.8\textwidth}
   \centering
@@ -243,6 +254,8 @@ We can, as an example, compress the Raccoon image in Figure~\ref{fig:raccoon}.
   }
   \label{fig:raccoon}
 \end{figure}
+\lstinputlisting[language=R]{kmeans_compression_example.R}
+
 
 \subsection{Basketball Position Data Analysis}
 
