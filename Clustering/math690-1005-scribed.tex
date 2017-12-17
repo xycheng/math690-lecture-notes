@@ -210,14 +210,9 @@ Let the normalized cut of partition $C$ be as defined as the summation of the no
 \subsection{Problem of Min NCut}
 \begin{dfn}[Min NCut]{dfn:min-ncut}
 	Let $ H $ be the matrix such that $ H = [\varphi_1, \ldots, \varphi_k] $ where $\varphi_i = c_i \mathbf{1}_{c_{l}} $. 
-	Then, the minimum $ NCut $ over the $ C $s is the trace of $ H^{\intercal} L H $.
+	Then, the minimum $ NCut $ over the $ C $s is the trace of $ H^{\intercal} L H $, where $ H^{\intercal} D H = I_{k} $.
+The solution of the spectral minimum $ NCut $ is the first $ k $ eigenvectors of $ \mathcal{L}_{rw} $ normalized to be $\varphi_k^T D \varphi_k = 1$. 
 \end{dfn}
-\begin{dfn}[Spectral Min NCut]{dfn:spectral-min-ncut}
-The spectral minimum $ NCut $ is defined to be the above trace, but where $ H^{\intercal} D H = I_{k} $.
-\end{dfn}
-\begin{theo}[Solution of Spectral Min NCut]{theo:sol-spectral-min-ncut}
-  The solution of the spectral minimum $ NCut $ is the first $ k $ eigenvectors of $ \mathcal{L}_{rw} $ normalized to be $\varphi_k^T D \varphi_k = 1$. 
-\end{theo}
 
 \subsection{Next class}
 
