@@ -12,6 +12,7 @@
 \usepackage{color}
 \usepackage[colorlinks,allcolors=newblue]{hyperref}
 \usepackage{listings}
+\usepackage{epigraph}
 \lstset{
     language=R,
     basicstyle=\scriptsize\ttfamily,
@@ -69,6 +70,26 @@
 
 \newcommand{\lecture}[4]{\handout{#1}{#2}{Lecturer: #3}{Scribes: #4}{#1}}
 
+\usepackage{libertine}
+\newcommand*\quotefont{}
+% Make commands for the quotes
+\newcommand*{\openquote}{\tikz[%
+remember picture,overlay,%
+xshift=-15pt,yshift=-10pt]
+\node (OQ) {\quotefont%
+\fontsize{60}{60}%
+\selectfont``};\kern0pt}
+\newcommand*{\closequote}{%
+\tikz[remember picture,overlay,%
+xshift=15pt,yshift=10pt]
+\node (CQ) {\quotefont%
+\fontsize{60}{60}\selectfont''};}
+\definecolor{shadecolor}{%
+named}{blue}
+\newenvironment{shadequote}%
+{\begin{quote}\openquote}
+{\hfill\closequote\end{quote}}
+
 %%%% TITLE
 
 \title{Math 690: Topics in Data Analysis and Computation \\
@@ -109,14 +130,18 @@ Recall that if a graph has $ k $ connected components, then the eigenspace of $ 
 \label{subsec:redefining}
 
 What if $ \mathcal{L}_{rw} $ instead of $ \mathcal{L}_{un} $?
-We see that $ \mathcal{L}_{rw} = \Psi(1 - \Lambda)\Psi^{\intercal} $ and that $ P = \Psi\Lambda\Psi^{\intercal} $.
+We see that
+\begin{align*}
+  \mathcal{L}_{rw} &= \Psi(1 - \Lambda)\Psi^{\intercal} \\
+  P &= \Psi\Lambda\Psi^{\intercal}
+\end{align*}
 Next, we note that $ \Psi^{\intercal} D \Psi = I $.
 Now, denoting $ \Psi = [ \varphi_1, \ldots, \varphi_{n} ] $, we can see that $ \varphi_k^{\intercal} D \varphi_l = 0 $ if $ k \neq l $.
 Finally, let $ P \phi_k = \lambda_k \phi_l $.
 
 \subsection{Eigenvectors}
 
-If $ f $ is an eigenvector of $ \mathcal{L}_{un} $ with $ \lambda = 0 $, $ \mathcal{L}_{un} f = 0 \dot f $ and $ (D - W)f = 0 $.
+If $ f $ is an eigenvector of $ \mathcal{L}_{un} $ with $ \lambda = 0 $, then $ \mathcal{L}_{un} f = 0 \dot f $ and $ (D - W)f = 0 $.
 If $ f $ is an eigenvector of $ \mathcal{L}_{rw} $ with $ \lambda = 0 $, then $ D^{-1} (D - W) f = 0 $ and $ (D - W)f = 0 $.
 \\ \\
 Next, we can also write the eigenvectors $ \varphi_{1} = c_1 \mathbf{1_{A_{1}}} + \cdots + c_k \mathbf{1_{A_{k}}} $.
@@ -159,20 +184,22 @@ We could use the log values of the ordered eigenvalues can provide some estimate
 Here we take a graph cut point of view in understanding spectral clustering and why it works. The following is the introduction given by Luxburg '07 ~\cite{luxburg-2007}. This wasn't necessarily part of the lecture discussion, but we thought it helps understand the section better.
 \end{rmk}
 
-\begin{quote}
-"The intuition of clustering is to separate points in different groups according to their similarities. For data given in form of a similarity graph, this problem can be restated as follows: we want to find a partition of the graph such that the edges between different groups have a very low weight (which means that points in different clusters are dissimilar from each other) and the edges within a group have high weight (which means that points within the same cluster are similar to each other). In this section we will see how spectral clustering can be derived as an approximation to such graph partitioning problems."~\cite{luxburg-2007}
-\end{quote}
+\begin{shadequote}
+The intuition of clustering is to separate points in different groups according to their similarities.
+For data given in form of a similarity graph, this problem can be restated as follows: we want to find a partition of the graph such that the edges between different groups have a very low weight (which means that points in different clusters are dissimilar from each other) and the edges within a group have high weight (which means that points within the same cluster are similar to each other).
+In this section we will see how spectral clustering can be derived as an approximation to such graph partitioning problems.~\cite{luxburg-2007}
+\end{shadequote}
 
 \subsection{Foundational Definition}
 
 \begin{dfn}[Cut]{dfn:cut}
 
-Let $ A \cap B = \emptyset $ where $ A, B \subset V = \{ 1, \ldots, n \} $.  
+Let $ A \cap B = \emptyset $ where $ A, B \subset V = \{ 1, \ldots, n \} $.
 Then a cut $ W(A, B) $ is defined as
 \[
 W(A, B) = \sum_{i \in A, j \in B} w_{ij}
 \]
-The optimal partitioning of a graph is the one that minimizes this cut value. There are exponentially many ways to make such partitions, and finding the $\textit{minimum cut}$ of a graph is an important problem. 
+The optimal partitioning of a graph is the one that minimizes this cut value. There are exponentially many ways to make such partitions, and finding the $\textit{minimum cut}$ of a graph is an important problem.
 \end{dfn}
 
 \begin{dfn}[Volume of a Set]{dfn:volume-set}
@@ -209,9 +236,9 @@ Let the normalized cut of partition $C$ be as defined as the summation of the no
 
 \subsection{Problem of Min NCut}
 \begin{dfn}[Min NCut]{dfn:min-ncut}
-	Let $ H $ be the matrix such that $ H = [\varphi_1, \ldots, \varphi_k] $ where $\varphi_i = c_i \mathbf{1}_{c_{l}} $. 
+	Let $ H $ be the matrix such that $ H = [\varphi_1, \ldots, \varphi_k] $ where $\varphi_i = c_i \mathbf{1}_{c_{l}} $.
 	Then, the minimum $ NCut $ over the $ C $s is the trace of $ H^{\intercal} L H $, where $ H^{\intercal} D H = I_{k} $.
-The solution of the spectral minimum $ NCut $ is the first $ k $ eigenvectors of $ \mathcal{L}_{rw} $ normalized to be $\varphi_k^T D \varphi_k = 1$. 
+The solution of the spectral minimum $ NCut $ is the first $ k $ eigenvectors of $ \mathcal{L}_{rw} $ normalized to be $\varphi_k^T D \varphi_k = 1$.
 \end{dfn}
 
 \subsection{Next class}
