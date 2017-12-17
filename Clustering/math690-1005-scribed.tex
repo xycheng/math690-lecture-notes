@@ -70,20 +70,15 @@
 
 \newcommand{\lecture}[4]{\handout{#1}{#2}{Lecturer: #3}{Scribes: #4}{#1}}
 
-\usepackage{libertine}
-\newcommand*\quotefont{}
-% Make commands for the quotes
 \newcommand*{\openquote}{\tikz[%
 remember picture,overlay,%
 xshift=-15pt,yshift=-10pt]
-\node (OQ) {\quotefont%
-\fontsize{60}{60}%
+\node (OQ) {\fontsize{250}{250}%
 \selectfont``};\kern0pt}
 \newcommand*{\closequote}{%
 \tikz[remember picture,overlay,%
 xshift=15pt,yshift=10pt]
-\node (CQ) {\quotefont%
-\fontsize{60}{60}\selectfont''};}
+\node (CQ) {\fontsize{250}{250}\selectfont''};}
 \definecolor{shadecolor}{%
 named}{blue}
 \newenvironment{shadequote}%
@@ -224,7 +219,7 @@ Let the normalized cut of partition $C$ be as defined as the summation of the no
     c_l &= \frac{1}{\sqrt{\vol{C_l}}}
 	\end{align*}
 \end{theo}
-
+\newpage
 \begin{prf}[NCut, Theorem~\ref{theo:ncut}]{prf:ncut}
 	\begin{align*}
 		\varphi_l^{\intercal} L \varphi_{l} &= \frac{1}{2} \sum_{ij} w_{ij}(\varphi_l(i) - \varphi_l(j))^2 \\

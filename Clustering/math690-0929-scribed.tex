@@ -58,19 +58,30 @@ Recall the convergence of eigenmap
 	&L_{\epsilon} f \xrightarrow{\epsilon \to 0} Lf &\text{for each } f
 \end{align*}
 This is a point-wise convergence operator and doesn't necessarily mean uniform convergence.
-Rather, what we need is a convergence of the spectrum $ \eig{L_{\Sigma}} \to \eig{L} $. In essence, we seek $\sup { \| L_{\Sigma} f - L f \| } \to 0$ where $ f \in C^2 (M) $, $ \| f \|_2^2 = 1 $, and $\int{f(x)^2dp(x)=1}$. Unfortunately, these last two conditions are not always true.~\cite{belkin-2003}
+Rather, what we need is a convergence of the spectrum $ \eig{L_{\Sigma}} \to \eig{L} $. In essence, we seek $\sup { \| L_{\Sigma} f - L f \| } \to 0$ where $ f \in C^2 (M) $, \( \| f \|_2^2 = 1 \) (i.e.\ \(\int{f(x)^2dp(x)=1} \)). Unfortunately, universal convergence is not always true.~\cite{belkin-2003}
 
 \begin{dfn}[Heat Kernel]{dfn:heat}
-Where $ t = \frac{1}{2} \epsilon $
-\begin{align*}
-	L_t &= \frac{I_{\alpha} - H_t}{t} + R_t \\
-	H_t f(x) &= u(x, t)
-\end{align*}
-where the function $ u $ has constraints
-\begin{align*}
- u_{t} &= -\Delta_M u \\
-	u(x, 0) &= f(x)
-\end{align*}
+
+  Assume on some manifold, we want to track the heat distribution over time, given by the function
+  \[
+  u(x, t)
+  \]
+  \( u \) is the solution of the heat equation on the manifold such that
+  \begin{align*}
+   u_{t} &= -\Delta_M u \\
+  	u(x, t_{0}) &= f(x)
+  \end{align*}
+where \( f \) is the initial condition, i.e.\ the initial heat distribution at time \( t_{0} = 0 \). To solve this system, we use the \textit{Heat Kernel} \( H_t \), which gives us an order \( t \) approximation when \( t = \frac{1}{2} \epsilon \).
+We write
+\[
+H_{t} \approx c e^{t \Delta_{M}}
+\]
+for some constant \( c \).
+Furthermore, we write
+\[
+L_t = \frac{I_{\alpha} - H_t}{t} + R_t
+\]
+for the residual \( R_{t} \).
 \end{dfn}
 As a result, we have that the residual $ \| R_t \| $ can be controlled properly
 which implies that $ \eig{L_t} = \eig{( \frac{I_d - H_t}{t} )} $
@@ -89,7 +100,17 @@ H_t f = e^{-t \Delta_M} f
 such that $ \Delta_M : \{ \lambda_k, \psi_k \}_k $
 and that $ H_t : \{ e^{-t \lambda_k}, \psi_k \}_k $
 such that $ k = 1, \ldots, d $.
-\\ \\
+\begin{dfn}[Fokker-Planck]{dfn:fp}
+  The Fokker-Planck equation is a famous stochastic differential equation that describes the evolution of the probability density function of the velocity of a particle subject to Brownian motion and other forces.
+  It is a hallmark of statistical mechanics and its full derivation, context, and details will be omitted.~\cite{schwabl-2006}
+  \\ \\
+  For a random variable \( X \) with probability density \( p \), we define
+  \[
+  \frac{\partial}{\partial t} p(x, t) = -\frac{\partial}{\partial x}[\mu(x, t)p(x, t)] + \frac{\partial^2}{\partial x^2}[D(x, t)p(x, t)]
+  \]
+  with drift \( \mu \) and diffusion \( D \).
+  This equation can be easily extended to multiple dimensions.~\cite{wiki:fp}
+\end{dfn}
 \begin{rmk}[$ p(x) $ Uniformity]{rmk:p-uniform}
 	When $ p(x) $ is not uniform, then
 	\[
@@ -101,10 +122,11 @@ such that $ k = 1, \ldots, d $.
 		p(x) &= e^{-\frac{1}{2} u(x)} \\
 		u(x) &= -2 \log{p(x)}
 	\end{align*}
-	by Fokker-Planck.
+	by Fokker-Planck in Definition~\ref{dfn:fp}.
 \end{rmk}
 We have to perform a ``correction'' of density by defining a Weight Matrix $ W $ such that $ W_{ij} = k(x_i, x_j) $.
-\begin{dfn}[Density corrected affinity matrix]{dfn:affinity}
+\newpage
+\begin{dfn}[Density-Corrected Affinity Matrix]{dfn:affinity}
 	Let
 	\begin{align*}
 		d_i &= \sum_{j} k(x_i, x_j) \\
