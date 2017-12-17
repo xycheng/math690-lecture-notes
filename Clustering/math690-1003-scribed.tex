@@ -6,6 +6,7 @@
 \usepackage[framemethod=TikZ]{mdframed}
 \definecolor{newblue}{rgb}{0.2,0.2,0.6}
 \usepackage{caption}
+\usepackage{bm}
 \usepackage{graphicx}
 \usepackage{float}
 \usepackage{listings}
@@ -45,6 +46,7 @@
 \newtheorem*{proposition}{Proposition}
 \DeclareMathOperator*{\argmin}{arg\,min}
 \DeclareMathOperator*{\eig}{eig}
+\DeclareMathOperator*{\Span}{span}
 
 \newcommand{\handout}[5]{
    \renewcommand{\thepage}{#1-\arabic{page}}
@@ -83,7 +85,7 @@ Lecture notes for October 3, 2017}
 \section{Introduction}
 The lecture covered
 \begin{itemize}
-	\item A discussion of KK10 paper on the consistency of Lloyd's k-means algorithm
+	\item A discussion of the consistency of Lloyd's k-means algorithm~\cite{kumar-2010}
 	\item An introduction to Spectral Clustering
 \end{itemize}
 
@@ -205,17 +207,25 @@ where
 
 \end{theo}
 
-\begin{prf}[Eigenspace of $ \lambda = 0 $ of $\mathcal{L}$, Theorem~\ref{theo:eigenspace}]
-	Suppose $\mathbf{f}$ is an eigenvector with  $\lambda = 0$.
-  So $\mathcal{L}\textbf{f} = \textbf{0}$ and $\textbf{f}^T\mathcal{L}\textbf{f} = \textbf{0}$.
-  We also know $\textbf{f}^T\mathcal{L}\textbf{f} = \textbf{0} = \frac{1}{2} \sum_{(i,j)}w_{i,j}(f_i-f_j)^2$ and $\textbf{f}^T\mathcal{L}\textbf{f} = \textbf{0} \Leftrightarrow f_i=f_j$ whenever $w_{i,j} > 0$.
-  Thus, $\textbf{f}$ is a piecewise constant in each of the connected components.
-  Meanwhile, for each $v \in$ span $\{\mathbf{1}_{A_{1}}, \ldots, \mathbf{1}_{A_{k}} \}, \mathbf{v}^T \mathcal{L} \mathbf{v} = \mathbf{0}$.
+\begin{prf}[Eigenspace of $ \lambda = 0 $ of $\mathcal{L}$, Theorem~\ref{theo:eigenspace}]{prf:eigenspace-of-lambda-0}
+	Suppose \( \mathbf{f}$ is an eigenvector with  $\lambda = 0 \).
+  So \( \mathcal{L}\bm{f} = \bm{0} \) and \( \textbf{f}^T\mathcal{L}\bm{f} = \bm{0} \).
+  We also know
+  \[
+    \bm{f}^T\mathcal{L}\bm{f} = \bm{0} = \frac{1}{2} \sum_{(i,j)}w_{i,j}(f_i-f_j)^2
+  \]
+  and
+  \[
+    \bm{f}^T\mathcal{L}\bm{f} = \bm{0} \iff \forall i, j \; f_i = f_j
+  \]
+  whenever \( w_{i,j} > 0 \).
+  Thus, \( \bm{f} \) is a piecewise constant in each of the connected components.
+  Meanwhile, for each \( \bm{v} \in \Span{ \{ \mathbf{1}_{A_{1}}, \ldots, \mathbf{1}_{A_{k}} \} }\), we see that \( \bm{v}^T \mathcal{L} \bm{v} = \bm{0} \).
 \end{prf}
-\textbf{Exercise}
+\textbf{Exercises}
 \begin{itemize}
-	\item Does this generalize to $\mathcal{L}_{rw}$ and $\mathcal{L}_{sym}$?
-	\item What about consistency of spectral clustering?
+	\item Does this generalize to \( \mathcal{L}_{rw} \) and \( \mathcal{L}_{sym} \)?
+	\item How consistent is spectral clustering?
 \end{itemize}
 
 \section{Applications}
@@ -225,9 +235,9 @@ where
 When should we use spectral clustering and when should we use $ k $-means clustering?
 One prototypical example is with spirals.
 $ k $-means excels when the clusters are assumed to be dense point clouds separated from other dense point clouds.
-Spectral clustering works well where clusters may have many points with small local distances (with some metric), i.e.\ concentric circles. The connective relation between clusters are more important for spectral clustering. 
+Spectral clustering works well where clusters may have many points with small local distances (with some metric), i.e.\ concentric circles. The connective relation between clusters are more important for spectral clustering.
 \\ \\
-Spectral clustering can perform as well as $ k $-means in most clustering tasks. But one disadvantage of spectral clustering is its \textit{computational expense}. It requires an additional step in computing the affinity matrix. Furthermore, for a data set of N points and P features, the dimension for $ k $-means is N $\times$ P, whereas it is N $\times$ N for spectral clustering. 
+Spectral clustering can perform as well as $ k $-means in most clustering tasks. But one disadvantage of spectral clustering is its \textit{computational expense}. It requires an additional step in computing the affinity matrix. Furthermore, for a data set of N points and P features, the dimension for $ k $-means is N $\times$ P, whereas it is N $\times$ N for spectral clustering.
 \\ \\
 To analyze this situation, we can use \texttt{R} to study this behavior.
 \begin{figure}[H]
@@ -242,9 +252,9 @@ To analyze this situation, we can use \texttt{R} to study this behavior.
 \lstinputlisting[language=R]{sc_kmeans_example.R}
 
 \subsection{Using k-means on Images}
-We can also use $ k $-means to compress an image. Though not an immediately obvious application of clustering, image compression can rely on $ k $-means to cluster pixel values represented by 0 to 255. Thus, if we have uni-color photo that is defined by pixel values 0 to 255, we can find $ k $ groups to cluster pixels and compress the original image using $ k $ pixel values. 
+We can also use $ k $-means to compress an image. Though not an immediately obvious application of clustering, image compression can rely on $ k $-means to cluster pixel values represented by 0 to 255. Thus, if we have uni-color photo that is defined by pixel values 0 to 255, we can find $ k $ groups to cluster pixels and compress the original image using $ k $ pixel values.
 \\ \\
-We can, as an example, compress the Raccoon image in Figure~\ref{fig:raccoon}. The original image and compression from $ k $ = 2, 4, and 6 are shown as examples. 
+We can, as an example, compress the Raccoon image in Figure~\ref{fig:raccoon}. The original image and compression from $ k $ = 2, 4, and 6 are shown as examples.
 \begin{figure}[H]
   \captionsetup{width=0.8\textwidth}
   \centering
@@ -260,6 +270,7 @@ We can, as an example, compress the Raccoon image in Figure~\ref{fig:raccoon}. T
 \subsection{Basketball Position Data Analysis}
 
 Spectral clustering can also be used with basketball position data.
+In fact, using position information from basketball players, it is possible to use spectral clustering to develop a rough classification scheme for different plays.
 
 
 \bibliography{clustering}{}
