@@ -1,5 +1,6 @@
 \documentclass[11pt]{article}
 \usepackage{latexsym}
+\usepackage[vmargin=1.2in,hmargin=1in]{geometry}
 \usepackage{graphicx}
 \usepackage{amsmath,amssymb,amsthm,calc}
 \usepackage{euscript}
@@ -8,15 +9,10 @@
 \usepackage{tabularx}
 \usepackage{bm}
 \usepackage{makecell}
-
-\usepackage[linesnumbered,lined,boxed,commentsnumbered]{algorithm2e}
-
-\usepackage[top=1.25in,bottom=1.25in,left=2in,right=2in]{geometry}
 \usepackage{enumitem}
 \newlist{steps}{enumerate}{1}
 \setlist[steps, 1]{leftmargin=3\parindent, label = Step \arabic*:}
-
-
+\usepackage[linesnumbered,lined,boxed,commentsnumbered]{algorithm2e}
 \usepackage{subfig}
 \usepackage{microtype}
 \usepackage{fullpage}
@@ -117,8 +113,8 @@ Now we introduce another method for denoising the sample covariance and estimate
     \includegraphics[scale=.85]{./fig/tr.pdf}
     \caption{Thresholding function $Tr(x)$.}
 \end{figure}
-
 That is, we filter out entries of small absolute values.
+
 \begin{exercise}
     Let $y_i\sim \mathcal{N}(0,1)$ be i.i.d.\ Gaussian samples. After applying the thresholding function with $\delta = \frac{2\log n}{\sqrt{n}}$ on the sample covariance,  non-diagonal entries converge to $\mathcal{N}(0,c/n)$ as $n\rightarrow \infty$, for some constant $c$. Roughly speaking, only diagonal entries remain.
 \end{exercise}
@@ -144,13 +140,13 @@ Without loss of generality, assume that input data are centered at origin (\text
 \[
     \mathbf{D} = \bm{\xi}\mathbf{1}^T +  \mathbf{1}\bm{\xi}^T - 2\bm{G}, 
 \]
-where $\mathbf{G} = \mathbf{X}^T\mathbf{X}$ is the Gramian and $\bm{\xi} = \left[\norm{\mathbf{x_i}}^2 , \ldots, \norm{\mathbf{x_n}}^2\right]^T$. In general, the input is not necessarily $\mathbf{X}$ but only the distance matrix $\mathbf{D}$. This problem is in fact equivalent of PCA\@. However, one can still compute the Gramian without not knowing the data coordinates $\mathbf{X}$ by \textit{double centering}.
+where $\mathbf{G} = \mathbf{X}^T\mathbf{X}$ is the Gramian and $\bm{\xi} = \left[\norm{\mathbf{x_i}}^2 , \ldots, \norm{\mathbf{x_n}}^2\right]^T$. In general, the input is not necessarily $\mathbf{X}$ but only the distance matrix $\mathbf{D}$. However, one can still compute the Gramian without knowing the data coordinates $\mathbf{X}$ by \textit{double centering}.
 
-Let $\bm{H} = \bm{I} - \frac{1}{n}\bm{1}\bm{1}^T$. We notice that since $\bm{H \cdot 1} =\bm{0}$, $\bm{HGH} = \mathbf{H}(\bm{X}^T\bm{X})\bm{H} = G$. Then
+Let $\bm{H} = \bm{I} - \frac{1}{n}\bm{1}\bm{1}^T$. We notice that since $\bm{H \cdot 1} =\bm{0}$, $\bm{HGH} = \mathbf{H}(\bm{X}^T\bm{X})\bm{H} = \bm{G}$. Then
 \[
     - \frac{1}{2}\bm{HDH} = \bm{G}.
 \]
-We obtain $\bm{Y}$, we compute $\mathbf{\widetilde{G}}$ by applying PCA on $\bm{G}$ using the top $k$ eigenvectors. It turns out that setting $\bm{Y} = \bm{S}_{1:d,1:d} \bm{V}_{:,1:d}$ minimizes the objective~(\ref{eqn:otp}).
+To obtain $\bm{Y}$, we compute the top $d$ eigenvalues $\mathbf{\widetilde{G}}$ and their corresponding eigenvectors. As the last step we set $\bm{Y} = \bm{E}_d\Lambda_d^{1/2}$, where $\bm{E}_d$ is the matrix of the $d$ eigenvectors and $\Lambda$ is the diagonal matrix of the top $d$ eigenvalues. However, we remark that this does not necessarily minimize the objective~(\ref{eqn:otp}).
 
 \section{Isomap}
 Given $\mathbf{X} = [\mathbf{x_i}]_{D\times n}$, we want to embed them in lower dimension by finding $\mathbf{Y}= [\mathbf{y_i}]_{d\times n}$.
@@ -160,10 +156,10 @@ Given $\mathbf{X} = [\mathbf{x_i}]_{D\times n}$, we want to embed them in lower 
     \item Classical MDS\@. Compute $D_{ij} =d^2_{ij}$, the Gramian $\bm{G}=-\frac{1}{2}\bm{HDH}$, then compute the top $d$ eigenvectors of $G$.
 \end{steps}
 \begin{remark}
-    If the data sit on some low-dimensional manifold, under certain assumptions ({\it e.g.}, on sampling of the points), the shortest path distance we compute approximates the geodesic distance on the manifold.
+    If the data sit on some low-dimensional manifold, under certain assumptions ({\it e.g.}, on sampling of the points), the shortest path distance we compute approximates the geodesic distance on the manifold~\cite{bernstein2000graph}.
 \end{remark}
 \begin{remark}
-The decay of the eigenvalues of $G$ can indicate the intrinsic dimension of the data.
+    The decay of the eigenvalues of $G$ indicates the intrinsic dimension of the data~\cite{tenenbaum2000global}.
 \end{remark}
 
 \section{Locally Linear Embedding (LLE)} 
@@ -188,7 +184,7 @@ The decay of the eigenvalues of $G$ can indicate the intrinsic dimension of the 
     such that $\bm{Y}\bm{1}=\bm{0}$ and $\bm{Y}^T\bm{T}=\bm{I}_d$. This turns out to be an eigvenvalue problem on $\bm{M}=(\bm{I}-\bm{W})^T(\bm{I}-\bm{W})$.
 \end{steps}
 \begin{remark}
-    The matrix $\bm{M}$ approximates the graph Laplacian $\bm{L}$ of the $k$-NN graph.
+    The matrix $\bm{M}$ approximates the graph Laplacian $\bm{L}$ of the $k$-NN graph~\cite{belkin2007convergence}.
 \end{remark}
 
 \section{Laplacian Eigenmap}
@@ -209,12 +205,31 @@ Note
     \[
         \mathbf{L_{rw} = \bm{D}^{-1} (\bm{D}-\bm{W})} = \bm{I} - \underbrace{\bm{D}^{-1}\bm{W}}_{\bm{P}}.
     \]
-    Here $P_{ij}= W_{ij} / d_i$.  We notice that $\mathbf{P}$ is a probablisitic matrix, and this defines a random walk on the graph. The eigenvalues of $\bm{P}$ are in $[-1,1]$. The largest eigenvalue is $\lambda_1 =1$ is of multiplicity $1$ if the graph is connected and $-1$ is not an eigenvalue if the random walk has no cycles.
+    Here $P_{ij}= W_{ij} / d_i$.  We notice that $\mathbf{P}$ is a probablisitic matrix, and this defines a random walk on the graph. Next, we demonstrate a few properties of the matrix.
+\begin{lemma}
+     The eigenvalues of $\bm{P}$ are in $[-1,1]$.
+\end{lemma}
+\begin{proof}
+    Let $x_i^*$ be the entry of $\bm{x}$ of the maximum magnitude. Since $\bm{P}$ is a symmetric probablisitic matrix, for every $j$, $\sum_{i} P_{ij} = 1$. Then, for each $j$,
+    \begin{align*}
+        \left|(\bm{P}\bm{x})_j\right| &= \left|\sum_{i} P_{ij}x_i\right|\\
+                                &\leq |x_i^*|\left|\sum_{i} P_{ij}\right|\\
+                                &=|x_i^*|.
+    \end{align*}
+    Therefore, the stretch for each coordinate is at most $1$ in magnitude. This implies the desired bound on all eigenvalues.
+\end{proof}
+\begin{lemma}
+    The largest eigenvalue is $\lambda_1 =1$ and is of multiplicity $1$ if the graph is connected.
+\end{lemma}
+\begin{proof}
+    First observe that $\frac{1}{n} \bm{1}$ is a eigenvector corresponding to eigenvalue of $1$, where $\bm{1}$ is the all-one vector. Suppose $G$ is not connected. Let $\bm{v}$ be a uniform distribution on one connected component of size $n'$, \textit{i.e.}, $v_i = \frac{1}{n'}$ if $i$ is a vertex of the component and $0$ otherwise. Notice that $\bm{P}\bm{v} =\bm{v}$. Therefore, this gives another eigenvector with eigenvalue $1$. 
+\end{proof}
+\begin{lemma}
+     $-1$ is not an eigenvalue if the random walk does not have a cycle.
+\end{lemma}
 \begin{exercise}
     What is the stationary distribution of $\bm{P}$?
 \end{exercise}
-
 \bibliographystyle{alpha}
 \bibliography{bib}
-
 \end{document}
