@@ -167,12 +167,12 @@ Here we take a graph cut point of view in understanding spectral clustering and 
 
 \begin{dfn}[Cut]{dfn:cut}
 
-Let $ A \cap B = \emptyset $ where $ A, B \subset V = \{ 1, \ldots, n \} $.
+Let $ A \cap B = \emptyset $ where $ A, B \subset V = \{ 1, \ldots, n \} $.  
 Then a cut $ W(A, B) $ is defined as
 \[
 W(A, B) = \sum_{i \in A, j \in B} w_{ij}
 \]
-
+The optimal partitioning of a graph is the one that minimizes this cut value. There are exponentially many ways to make such partitions, and finding the $\textit{minimum cut}$ of a graph is an important problem. 
 \end{dfn}
 
 \begin{dfn}[Volume of a Set]{dfn:volume-set}
@@ -190,11 +190,12 @@ NCut(C) = \sum_{l = 1}^k \frac{W(C_1, C_l^c) }{ \vol{(C_l)} }
 \end{dfn}
 
 \begin{theo}[NCut]{theo:ncut}
+Let the normalized cut of partition $C$ be as defined as the summation of the normalized cuts $\frac{W(C_l, C_l^c)}{Vol(C_l)}$. If $\varphi_l = c_{l} \mathbf{1}_{c_{l}}$, where $l = 1, \ldots, k$ and $c_l \frac{1}{\sqrt{\vol{(C_l)}}}$, then $NCut(C) = \sum_{l = 1}^{k} \varphi_l^{\intercal} L \varphi_{l}$.
   \begin{align*}
     NCut(C) &= \sum_{l = 1}^{k} \varphi_l^{\intercal} L \varphi_{l} \\
     \varphi_l &= c_{l} \mathbf{1_{c_{l}}} & l = 1, \ldots, k \\
     c_l &= \frac{1}{\sqrt{\vol{C_l}}}
-  \end{align*}
+	\end{align*}
 \end{theo}
 
 \begin{prf}[NCut, Theorem~\ref{theo:ncut}]{prf:ncut}
@@ -208,14 +209,14 @@ NCut(C) = \sum_{l = 1}^k \frac{W(C_1, C_l^c) }{ \vol{(C_l)} }
 
 \subsection{Problem of Min NCut}
 \begin{dfn}[Min NCut]{dfn:min-ncut}
-	Let $ H $ be the matrix such that $ H = [\varphi_1, \ldots, \varphi_k] $.
+	Let $ H $ be the matrix such that $ H = [\varphi_1, \ldots, \varphi_k] $ where $\varphi_i = c_i \mathbf{1}_{c_{l}} $. 
 	Then, the minimum $ NCut $ over the $ C $s is the trace of $ H^{\intercal} L H $.
 \end{dfn}
 \begin{dfn}[Spectral Min NCut]{dfn:spectral-min-ncut}
 The spectral minimum $ NCut $ is defined to be the above trace, but where $ H^{\intercal} D H = I_{k} $.
 \end{dfn}
 \begin{theo}[Solution of Spectral Min NCut]{theo:sol-spectral-min-ncut}
-  The solution of the spectral minimum $ NCut $ is the first $ k $ eigenvectors of $ \mathcal{L}_{rw} $ normalized.
+  The solution of the spectral minimum $ NCut $ is the first $ k $ eigenvectors of $ \mathcal{L}_{rw} $ normalized to be $\varphi_k^T D \varphi_k = 1$. 
 \end{theo}
 
 \subsection{Next class}
