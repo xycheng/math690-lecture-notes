@@ -138,7 +138,7 @@ d_1\\.\\.\\.\\d_n
 \end{remark}
 
 \section{Diffusion Map}
-Diffusion Map is a similar dimensionality reduction algorithm as Laplacian Eigenmap. For some fixed $t>0$, the diffusion map $\Psi_t^d(\boldsymbol{x}_i) = ({\lambda_{2}}^t\boldsymbol{\phi}_2(i), ..., (\lambda_{d+1})^t\boldsymbol{\phi}_{d+1}(i))$ compresses every $\boldsymbol{x}_i$ to a d-dimensional vector. $\boldsymbol{\phi}_{j}$ denotes the same vector as in the previous section, and $\lambda_j$ is the jth largest eigenvalues of P, i.e. $1 = \lambda_1 \geq \lambda_2 \geq ... \geq \lambda_n$.
+Diffusion Map \cite{coifman2005geometric}\cite{coifman2006diffusion} is a similar dimensionality reduction algorithm as Laplacian Eigenmap. For some fixed $t>0$, the diffusion map $\Psi_t^d(\boldsymbol{x}_i) = ({\lambda_{2}}^t\boldsymbol{\phi}_2(i), ..., (\lambda_{d+1})^t\boldsymbol{\phi}_{d+1}(i))$ compresses every $\boldsymbol{x}_i$ to a d-dimensional vector. $\boldsymbol{\phi}_{j}$ denotes the same vector as in the previous section, and $\lambda_j$ is the jth largest eigenvalues of P, i.e. $1 = \lambda_1 \geq \lambda_2 \geq ... \geq \lambda_n$.
 \begin{definition}
 	The diffusion distance between $\boldsymbol{x}_i$ and $\boldsymbol{x}_j$ is defined as $D_t(\boldsymbol{x}_i, \boldsymbol{x}_j)$, where $D_t^2(\boldsymbol{x}_i, \boldsymbol{x}_j) = ||\Psi_t^{n-1}(\boldsymbol{x}_i) - \Psi_t^{n-1}(\boldsymbol{x}_j)||^2$
 \end{definition}
@@ -147,7 +147,7 @@ Diffusion Map is a similar dimensionality reduction algorithm as Laplacian Eigen
 \end{remark}
 \begin{prop}
 \label{diffusion}
-If we think of $P$ as the transition probability matrix for the random walk $\{X_t\}_{t=1}^\infty$ on the graph indices, meaning $(P^t)_{ij} = Pr[X_{s+t} = j | X_s = i],\; \forall s$, then $D_t^2(\boldsymbol{x}_i, \boldsymbol{x}_j) = ||(P^t)_{i,:} - (P^t)_{j,:}||_w^2$, where $(P^t)_{i,:}$ means the ith row vector of $P^t$ and the squared norm on the right hand side is a weighted $L^2$ norm where $w_k = \frac{c}{d_k}, \;\forall k$ for some fixed c.
+If we think of $P$ as the transition probability matrix for the random walk $\{X_t\}_{t=1}^\infty$ on the graph indices, meaning $(P^t)_{ij} = Pr[X_{s+t} = j | X_s = i],\; \forall s$, then $D_t^2(\boldsymbol{x}_i, \boldsymbol{x}_j) = ||(P^t)_{i,:} - (P^t)_{j,:}||_w^2$, where $(P^t)_{i,:}$ means the ith row vector of $P^t$ and the squared norm on the right hand side is a weighted $L^2$ norm where $w_k = \frac{\sum_{i=1}^{n}d_i}{d_k}, \;\forall k$.
 \end{prop}
 \begin{remark}
 When the graph is connected, $\lambda = 1$ is of multiplicity 1. From Equation \ref{P} and \ref{phipsi}, we know $P^t = \Psi \Lambda^t \Phi^T$. As $t \rightarrow \infty$, only the first eigenvalue which is equal to 1 survives in $\Lambda^t$. As a result, $\lim_{t \rightarrow \infty} P^t = \boldsymbol{\psi}_1\boldsymbol{\phi}_1^T$. Because every coordinate in $\boldsymbol{\psi}_1$ is the same, by the Proposition above, the diffusion distance would become zero for any pair of $\boldsymbol{x}_i$ and $\boldsymbol{x}_j$ as $t \rightarrow \infty$.
@@ -187,12 +187,12 @@ $\widehat{\lambda_{k}} \rightarrow \lambda_{k}$ and $\widehat{\boldsymbol{\psi}_
 \begin{remark}
 When the point cloud is not uniformly sampled from M but instead sampled from a distribution $p$, the convergence result is as follows:
 \begin{equation}
-\lim_{n\rightarrow \infty, \epsilon \rightarrow 0} \frac{1}{\epsilon} L_{n,\epsilon} \to -\frac{1}{2}(\Delta_M + 2\frac{\nabla p}{p} \cdot \nabla) + O(\epsilon)
-\end{equation}
+\frac{1}{\epsilon} L_{n,\epsilon} = -\frac{1}{2}(\Delta_M + 2\frac{\nabla p}{p} \cdot \nabla) + O(\epsilon)
+\end{equation}, when $n\rightarrow \infty$ and $\epsilon \rightarrow 0$.
 \end{remark}
 
 \section{tSNE}
-tSNE is the last dimensionality reduction technique we will introduce in this topic. It can achieve good results on real-life datasets such as MNIST. However, there is not a lot of theoretical result behind this method.
+\textit{t-Distributed Stochastic Neighbor Embedding} (tSNE) \cite{maaten2008visualizing} is the last dimensionality reduction technique we will introduce in this topic. It can achieve good results on real-life datasets such as MNIST. However, there is not a lot of theoretical result behind this method.
 
 tSNE works as follows: for a point cloud $\{\mathbf{x}_i\}_{i=1}^n$,
 \begin{steps}
@@ -204,8 +204,14 @@ Let $P$ be such that $P_{ij} = \frac{W_{ij}}{\sum_{j'=1}^{n}W_{ij'}}$, and initi
 
 The loss function $C(Y)$ is formulated using KL-divergence and the optimization for $Y$ is as follows:
 \[\min_{Y}C(Y) = \sum_{i \neq j}\overline{P}_{ij}log\frac{\overline{P}_{ij}}{Q_{ij}}\].
-\end{steps}
 
+
+The gradient of $C(Y)$ with repect to each $\boldsymbol{y}_{i }$ is given by
+\[\frac{\partial C}{\partial \boldsymbol{y}_i} = 4\sum_{j=1}^{n}(\overline{P}_{ij}-Q_{ij})(\boldsymbol{y}_{i} - \boldsymbol{y}_{j}) (1+||\boldsymbol{y}_{i} - \boldsymbol{y}_{j}||^2)^{-1}\]
+The gradient descent update step introduced in \cite{maaten2008visualizing} uses a momentum term to reduce the number of iterations required and works best if the momentum term is small until the map points have become moderately well organized:
+\[Y^{(t+1)} = Y^{(t)} + \eta\frac{\partial C}{\partial Y} + \alpha(t)(Y^{(t)}-Y^{(t-1)})\],
+where $\eta$ is the learning rate and $\alpha(t)$ is the momentum.
+\end{steps}
 \bibliographystyle{alpha}
 \bibliography{bib}
 
